@@ -1,7 +1,6 @@
 <mvc:View controllerName="pepero.exchange.peperoexchange.controller.Home"
     xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
-    <!-- A / MJY: 화면 이동만 연결한 기본 화면 -->
-    <Page id="page" title="빼빼로 증권거래소">
+    <Page id="page" title="빼빼로 증권거래소" class="sapUiResponsiveContentPadding">
         <customHeader>
             <Bar id="homeHeader">
                 <contentMiddle>
@@ -10,9 +9,42 @@
             </Bar>
         </customHeader>
         <content>
-            <VBox id="homeContent" class="sapUiResponsiveContentPadding sapUiMediumMarginTop">
-                <Text id="homeNotice" text="화면 이동 확인용 기본 화면입니다. 게임 기능은 구현 예정입니다." class="sapUiSmallMarginBottom" />
-                <Button id="startButton" text="시장으로 이동" press=".onStart" type="Emphasized" class="sapUiSmallMarginBottom" />
+            <VBox id="homeContent" class="sapUiMediumMarginTop">
+                <!-- 로고 삽입 예정 영역 -->
+                <HBox id="homeLogoPlaceholder" height="8rem" width="8rem" class="peperoCard sapUiSmallMarginBottom" />
+                <VBox id="homeIntro" class="sapUiMediumMarginBottom">
+                    <Title id="homeWelcomeTitle" text="달콤한 빼빼로 랜드에 오신 걸 환영해요!" level="H2" wrapping="true" class="peperoBrandTitle sapUiSmallMarginBottom" />
+                    <Text id="homeNotice" text="오르락내리락, 가격 롤러코스터를 즐겨보세요." class="sapUiTinyMarginBottom" />
+                    <Text id="homeIntroDescription" text="빼빼로 종목을 사고팔며 나만의 자산을 불려보세요!" />
+                </VBox>
+                <Panel id="homeRulesPanel" headerText="입장 전, 즐기는 방법!" class="sapUiSmallMarginBottom">
+                    <content>
+                        <VBox id="homeRulesContent">
+                            <VBox id="homeCashRule" class="sapUiSmallMarginBottom">
+                                <Label id="homeCashLabel" text="초기 자금 · 11,110 PPR" design="Bold" wrapping="true" class="peperoBrandTitle" />
+                                <Text id="homeInitialCash" text="주머니에 쏙! 놀이 자금을 챙기고 출발해요." />
+                            </VBox>
+                            <VBox id="homeDurationRule" class="sapUiSmallMarginBottom">
+                                <Label id="homeDurationLabel" text="게임 시간 · 3분" design="Bold" class="peperoBrandTitle" />
+                                <Text id="homeGameDuration" text="신나는 3분 동안 나만의 매매 타이밍을 찾아보세요." />
+                            </VBox>
+                            <VBox id="homeFeeRule">
+                                <Label id="homeFeeLabel" text="매매 수수료 · 없음" design="Bold" class="peperoBrandTitle" />
+                                <Text id="homeTradingFee" text="사고팔 때 수수료는 0! 가볍게 거래를 즐겨요." />
+                            </VBox>
+                        </VBox>
+                    </content>
+                </Panel>
+                <Panel id="homeChallengePanel" headerText="잠깐 들러요! 11.11초 챌린지 (선택)" class="sapUiSmallMarginBottom">
+                    <content>
+                        <VBox id="homeChallengeContent">
+                            <Text id="homeChallengeNotice" text="랜드 속 작은 놀이터에도 들러볼까요?" class="peperoBrandTitle sapUiSmallMarginBottom" />
+                            <Text id="homeChallengeDescription" text="시장에서 원할 때 참여해, 11.11초에 딱 맞춰 멈춰보세요!" class="sapUiSmallMarginBottom" />
+                            <Text id="homeChallengeOptional" text="참여는 자유! 빼빼로 매매만 즐겨도 좋아요." />
+                        </VBox>
+                    </content>
+                </Panel>
+                <Button id="startButton" text="게임 시작! 빼빼로 랜드로 출발" press=".onStart" type="Emphasized" class="sapUiSmallMarginBottom" />
             </VBox>
         </content>
     </Page>
