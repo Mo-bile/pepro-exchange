@@ -2,10 +2,11 @@
 
 ### 현재 상태
 
-- 현재는 SAP Fiori Generator로 생성한 기본 프로젝트이며 App·Home View/Controller만 존재한다.
-- `Component.js`는 `device` 모델을 등록하며, `manifest.json`에는 `i18n` 모델과 Home 경로만 설정되어 있다.
-- 아래 구조는 팀이 구현할 목표 구조다. Market·Result, Fragment, `logic/`, `model/gameState.js`는 아직 생성하지 않았다.
-- 기존 `webapp/test/`에는 Home 중심의 단위·통합 테스트 코드가 있다. 게임 기능 검증은 구현 후 추가한다.
+- Home·Market·Challenge·Result 기본 화면에 제목·안내·이동 버튼과 라우팅만 연결했다.
+- Market과 11.11초 챌린지는 독립된 View/Controller이며 Challenge Fragment는 제거했다.
+- Trade Fragment, `logic/`, `model/gameState.js`는 빈 틀이다. 공통 게임 모델·타이머·매매·측정·결과 계산은 미구현이다.
+- 시작 화면의 버튼도 화면 이동만 수행한다. 개발용 결과 화면 이동은 게임 종료 처리를 하지 않는다.
+- 기존 `webapp/test/`의 Home 테스트 파일은 유지한다.
 
 ### 실행 및 버전
 
@@ -19,8 +20,9 @@ npm run start-local
 - `npm start`는 `ui5.yaml`의 버전 없는 SAP CDN 프록시를 사용하므로 실행 버전이 달라질 수 있다. 같은 버전으로 개발할 때는 `npm run start-local`을 사용한다.
 - `npm run lint`: 정적 검사 / `npm run build`: 앱 빌드.
 
-### 목표 폴더 구조
-A~E는 역할 구분이다.
+### 폴더 구조 (화면 이동 외 기능은 구현 예정)
+
+- A~E는 역할 구분이다.
 
 ```text
 pepero-exchange/
@@ -39,15 +41,16 @@ pepero-exchange/
    │  ├─ App.view.xml               # A / MJY: 전체 화면 틀
    │  ├─ Home.view.xml              # A / MJY: 시작 화면
    │  ├─ Market.view.xml            # B / JHJ: 시장 화면
+   │  ├─ Challenge.view.xml         # D / SDB·JMJ: 챌린지 화면
    │  └─ Result.view.xml            # E / MJY: 결과 화면
    ├─ controller/
    │  ├─ App.controller.js          # A / MJY
    │  ├─ Home.controller.js         # A / MJY: 시작 처리
-   │  ├─ Market.controller.js       # B / JHJ: 이벤트·타이머·상태 반영
+   │  ├─ Market.controller.js       # B / JHJ: 시장 화면 이동
+   │  ├─ Challenge.controller.js    # D / SDB·JMJ: 시장 복귀
    │  └─ Result.controller.js       # E / MJY: 결과·다시하기
    ├─ fragment/
-   │  ├─ Trade.fragment.xml         # C / JJY: 주문·자산 UI
-   │  └─ Challenge.fragment.xml     # D / SDB·JMJ: 챌린지 팝업 UI
+   │  └─ Trade.fragment.xml         # C / JJY: 주문·자산 UI (빈 틀)
    ├─ model/
    │  ├─ models.js                  # 기존 기기 정보 모델
    │  └─ gameState.js               # A / MJY: 게임 초기값
@@ -57,29 +60,31 @@ pepero-exchange/
    │  └─ Result.js                  # E / MJY: 최종 결과 계산
    ├─ css/
    │  └─ style.css                  # 공통 스타일
-   ├─ i18n/
-   │  └─ i18n.properties            # 공통 화면 문구
    └─ test/
       ├─ unit/                     # 기능별 단위 검증
       └─ integration/              # 전체 흐름 검증
 ```
 
-### 화면 흐름과 구현 규칙
+### 현재 화면 이동
 
 ```text
-Home → Market → Result
-         │        └─ 다시하기: 상태 초기화 후 새 게임
-         ├─ Trade Fragment: 주문·자산 영역
-         └─ Challenge Fragment: 시장 정지 → 도전 → 시장 복귀
+Home → Market → Result → Home
+         │
+         ├─ Challenge → Market
+         └─ Home
 ```
 
-- 화면 경로는 Home·Market·Result 세 개로 구성한다. 챌린지는 별도 화면 경로 없이 Market 안의 Dialog로 연다.
-- Component에 `game`이라는 이름의 JSONModel 하나를 등록하고, 가격·현금·보유량을 공통으로 사용한다.
-- 게임 상태는 `ready | running | paused | finished`로 통일한다. 초기값은 `model/gameState.js`에서 생성한다.
-- View는 XML, Controller와 계산 모듈은 `sap.ui.define()` 형식으로 작성한다. `logic/`은 계산 분리를 위한 팀 폴더다.
-- Fragment는 자체 Controller가 없다. 주문·챌린지 이벤트는 `Market.controller.js`에 연결하고 계산은 담당 `logic/` 모듈에 위임한다.
-- 시장·챌린지 타이머 등록 및 해제는 `Market.controller.js`에서 관리한다. 계산 모듈은 타이머·DOM·라우팅·공통 모델을 직접 변경하지 않는다.
-- 챌린지는 자산 보상 없이 측정 기록과 오차를 표시한다.
+- 챌린지는 독립된 화면 경로로 이동한다. 기존 PDF의 Dialog 방식보다 이 README의 변경안을 우선한다.
+- i18n은 사용하지 않는다. 화면 문구는 XML에, 앱 제목·설명은 manifest.json에 직접 작성한다.
+- View는 XML, Controller는 `sap.ui.define()` 형식이다. 이벤트 함수는 라우터 이동만 수행한다.
+- Trade Fragment와 계산 모듈은 아직 화면에 연결하지 않았다.
+
+### 향후 기능 연결 규칙
+
+- 공통 game 모델, 초기값, 가격·매매·측정·결과 계산은 담당자가 구현한다.
+- 시장 진입·이탈과 챌린지 진입·복귀 시 정지·재개 및 타이머 정리 계약은 B·D가 함께 정한다. 현재는 타이머가 없다.
+- 주문 Fragment 이벤트는 Market Controller, 챌린지 이벤트는 Challenge Controller가 담당한다.
+- 계산 모듈은 DOM·라우팅·공통 모델을 직접 변경하지 않는다. 챌린지는 자산 보상 없이 기록과 오차를 표시할 예정이다.
 
 ### 담당 파일 및 협업 경계
 
@@ -88,20 +93,19 @@ Home → Market → Result
 | A·E / MJY | Component, manifest, App·Home·Result View/Controller, gameState.js, Result.js, README | 공통 구조·초기값·화면 전환·결과·다시하기·통합 검증 |
 | B / JHJ | Market.view.xml, Market.controller.js | 가격 갱신·제한시간·정지·재개·이벤트 연결·모델 반영 |
 | C / JJY | Trade.fragment.xml, logic/Trade.js | 주문·자산 UI, 거래 검증·잔고·자산 계산 |
-| D / SDB·JMJ | Challenge.fragment.xml, logic/Challenge.js | 챌린지 UI·측정 계산·오차·시간초과·탭숨김 처리 |
+| D / SDB·JMJ | Challenge.view.xml, Challenge.controller.js, logic/Challenge.js | 챌린지 UI·측정 계산·오차·시간초과·탭숨김 처리 |
 
 - D의 UI 담당과 계산 담당은 두 사람이 협의하여 정한다.
-- A·B가 매수·매도·도전 시작·종료·복귀 이벤트의 함수 틀과 입력·반환값을 먼저 맞춘다. 인계 후 Market Controller 파일 편집은 B가 모은다.
-- C·D는 계산과 검증을 각자 구현하고 B와 함께 연결한다. 기능 구현 전체를 B에게 넘기지 않는다.
+- Market Controller는 B, Challenge Controller는 D가 편집한다. 화면 간 상태·정지·복귀 계약은 A·B·D가 먼저 맞춘다.
+- C는 B와 거래를 연결하고, D는 자신의 Controller에서 챌린지를 구현한 뒤 B와 시장 정지·복귀를 연결한다.
 - `calculateAssets`는 Trade.js에서 제공하고 Result.js에서도 재사용하여 계산 중복을 줄인다.
-- 공통 모델 필드·함수 이름·공통 CSS·i18n을 변경할 때는 관련 담당자와 먼저 공유한다.
+- 공통 모델 필드·함수 이름·공통 CSS을 변경할 때는 관련 담당자와 먼저 공유한다.
 
-### 초기 공유 전 A의 준비 범위
+### 이번 준비 범위
 
-- 목표 파일 뼈대, 화면 이동, Fragment 배치와 공통 모델 초기값을 준비한다.
-- A·B가 이벤트 함수 틀과 모듈 입력·반환값을 정리한다.
-- 가격 변동·매매·챌린지 계산의 내부 구현은 담당자에게 맡긴다. 미구현 기능은 비활성화하거나 준비 중으로 표시한다.
-- 시작·결과·다시하기의 실제 구현과 전체 연결·검증은 초기 공유 후 각 담당 작업과 병행한다.
+- 폴더·파일 틀과 네 화면의 이동까지만 준비했다.
+- 초기 모델·타이머·거래·측정·결과·다시하기 동작은 이번 범위에 포함하지 않는다.
+- 공통 함수 계약과 실제 기능 연결은 후속 작업에서 담당자와 정한다.
 
 ## Application Details
 |               |

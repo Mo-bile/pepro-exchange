@@ -3,12 +3,11 @@
   "sap.app": {
     "id": "pepero.exchange.peperoexchange",
     "type": "application",
-    "i18n": "i18n/i18n.properties",
     "applicationVersion": {
       "version": "0.0.1"
     },
-    "title": "{{appTitle}}",
-    "description": "{{appDescription}}",
+    "title": "빼빼로 증권거래소",
+    "description": "빼빼로 주식 거래와 11.11초 챌린지를 즐기는 게임",
     "resources": "resources.json",
     "sourceTemplate": {
       "id": "@sap/generator-fiori:basic",
@@ -45,14 +44,7 @@
       "compact": true,
       "cozy": true
     },
-    "models": {
-      "i18n": {
-        "type": "sap.ui.model.resource.ResourceModel",
-        "settings": {
-          "bundleName": "pepero.exchange.peperoexchange.i18n.i18n"
-        }
-      }
-    },
+    "models": {},
     "resources": {
       "css": [
         {
@@ -76,13 +68,48 @@
         {
           "name": "RouteHome",
           "pattern": ":?query:",
-          "target": ["TargetHome"]
+          "target": [
+            "TargetHome"
+          ]
+        },
+        {
+          "name": "RouteMarket",
+          "pattern": "market:?query:",
+          "target": [
+            "TargetMarket"
+          ]
+        },
+        {
+          "name": "RouteChallenge",
+          "pattern": "challenge:?query:",
+          "target": [
+            "TargetChallenge"
+          ]
+        },
+        {
+          "name": "RouteResult",
+          "pattern": "result:?query:",
+          "target": [
+            "TargetResult"
+          ]
         }
       ],
       "targets": {
         "TargetHome": {
           "id": "Home",
           "name": "Home"
+        },
+        "TargetMarket": {
+          "id": "Market",
+          "name": "Market"
+        },
+        "TargetChallenge": {
+          "id": "Challenge",
+          "name": "Challenge"
+        },
+        "TargetResult": {
+          "id": "Result",
+          "name": "Result"
         }
       }
     },

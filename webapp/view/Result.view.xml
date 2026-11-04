@@ -1,0 +1,12 @@
+<mvc:View controllerName="pepero.exchange.peperoexchange.controller.Result"
+    xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+    <!-- E / MJY: 화면 이동만 연결한 기본 화면 -->
+    <Page id="resultPage" title="게임 결과">
+        <content>
+            <VBox id="resultContent" class="sapUiResponsiveContentPadding sapUiMediumMarginTop">
+                <Text id="resultNotice" text="화면 이동 확인용 기본 화면입니다. 게임 기능은 구현 예정입니다." class="sapUiSmallMarginBottom" />
+                <Button id="homeButton" text="시작 화면으로" press=".onHome" type="Emphasized" class="sapUiSmallMarginBottom" />
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

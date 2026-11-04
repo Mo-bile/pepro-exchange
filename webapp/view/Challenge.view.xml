@@ -1,0 +1,12 @@
+<mvc:View controllerName="pepero.exchange.peperoexchange.controller.Challenge"
+    xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+    <!-- D / SDB·JMJ: 화면 이동만 연결한 기본 화면 -->
+    <Page id="challengePage" title="11.11초 챌린지">
+        <content>
+            <VBox id="challengeContent" class="sapUiResponsiveContentPadding sapUiMediumMarginTop">
+                <Text id="challengeNotice" text="화면 이동 확인용 기본 화면입니다. 게임 기능은 구현 예정입니다." class="sapUiSmallMarginBottom" />
+                <Button id="returnButton" text="시장으로 돌아가기" press=".onMarket" type="Emphasized" class="sapUiSmallMarginBottom" />
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

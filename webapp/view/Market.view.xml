@@ -1,0 +1,14 @@
+<mvc:View controllerName="pepero.exchange.peperoexchange.controller.Market"
+    xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+    <!-- B / JHJ: 화면 이동만 연결한 기본 화면 -->
+    <Page id="marketPage" title="빼빼로 시장">
+        <content>
+            <VBox id="marketContent" class="sapUiResponsiveContentPadding sapUiMediumMarginTop">
+                <Text id="marketNotice" text="화면 이동 확인용 기본 화면입니다. 게임 기능은 구현 예정입니다." class="sapUiSmallMarginBottom" />
+                <Button id="challengeButton" text="11.11초 챌린지로 이동" press=".onChallenge" type="Emphasized" class="sapUiSmallMarginBottom" />
+                <Button id="resultButton" text="결과 화면 확인 (개발용)" press=".onResult" type="Default" class="sapUiSmallMarginBottom" />
+                <Button id="homeButton" text="시작 화면으로" press=".onHome" type="Transparent" class="sapUiSmallMarginBottom" />
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>
