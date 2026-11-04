@@ -81,6 +81,10 @@ Home → Market → Result → Home
 
 ### 향후 기능 연결 규칙
 
+- 공통 색상·새 화면 XML 예시는 [UI 스타일 가이드](document/ui-style-guide.md)를 따른다.
+- 앱 내부 기본 Page 배경은 자동으로 크림색을 사용한다. 카드 `peperoCard`, 브랜드 제목 `peperoBrandTitle`, 기록 배지 `peperoRecordBadge`는 해당 요소에 지정한다.
+- 버튼·상태 색은 `sap_horizon` 기본값을 유지한다. 팝업과 다크·고대비 테마는 별도 검토 대상이다.
+
 - 공통 game 모델, 초기값, 가격·매매·측정·결과 계산은 담당자가 구현한다.
 - 시장 진입·이탈과 챌린지 진입·복귀 시 정지·재개 및 타이머 정리 계약은 B·D가 함께 정한다. 현재는 타이머가 없다.
 - 주문 Fragment 이벤트는 Market Controller, 챌린지 이벤트는 Challenge Controller가 담당한다.

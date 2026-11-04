@@ -1,1 +1,38 @@
-/* Enter your custom styles here */
+/* Service colors are scoped to this app; Horizon owns control/state colors. */
+.peperoApp {
+    --pepero-page-bg: #FAF7F2;
+    --pepero-surface: #FFFFFF;
+    --pepero-brand: #5A382B;
+    --pepero-border: #E8D8C3;
+    --pepero-accent: #F2C66D;
+
+    background-color: var(--pepero-page-bg);
+}
+
+/* New Pages with the default backgroundDesign inherit the same base. */
+.peperoApp .sapMPageBgStandard {
+    background-color: var(--pepero-page-bg);
+}
+
+.peperoApp .peperoCard {
+    box-sizing: border-box;
+    padding: 1rem;
+    background-color: var(--pepero-surface);
+    border: 1px solid var(--pepero-border);
+    border-radius: 0.75rem;
+}
+
+.peperoApp .peperoBrandTitle {
+    color: var(--pepero-brand);
+}
+
+.peperoApp .peperoRecordBadge {
+    box-sizing: border-box;
+    display: inline-block;
+    max-width: 100%;
+    padding: 0.25rem 0.625rem;
+    background-color: var(--pepero-accent);
+    color: var(--pepero-brand);
+    border-radius: 0.5rem;
+    overflow-wrap: anywhere;
+}

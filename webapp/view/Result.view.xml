@@ -2,10 +2,19 @@
     xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
     <!-- E / MJY: 화면 이동만 연결한 기본 화면 -->
     <Page id="resultPage" title="게임 결과">
+        <customHeader>
+            <Bar id="resultHeader">
+                <contentMiddle>
+                    <Title id="resultBrandTitle" text="게임 결과" level="H2" class="peperoBrandTitle" />
+                </contentMiddle>
+            </Bar>
+        </customHeader>
         <content>
             <VBox id="resultContent" class="sapUiResponsiveContentPadding sapUiMediumMarginTop">
-                <Text id="resultNotice" text="화면 이동 확인용 기본 화면입니다. 게임 기능은 구현 예정입니다." class="sapUiSmallMarginBottom" />
-                <Button id="homeButton" text="시작 화면으로" press=".onHome" type="Emphasized" class="sapUiSmallMarginBottom" />
+                <VBox id="resultCard" width="100%" class="peperoCard">
+                    <Text id="resultNotice" text="화면 이동 확인용 기본 화면입니다. 게임 기능은 구현 예정입니다." class="sapUiSmallMarginBottom" />
+                    <Button id="homeButton" text="시작 화면으로" press=".onHome" type="Emphasized" class="sapUiSmallMarginBottom" />
+                </VBox>
             </VBox>
         </content>
     </Page>

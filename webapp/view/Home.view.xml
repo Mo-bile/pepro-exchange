@@ -2,6 +2,13 @@
     xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
     <!-- A / MJY: 화면 이동만 연결한 기본 화면 -->
     <Page id="page" title="빼빼로 증권거래소">
+        <customHeader>
+            <Bar id="homeHeader">
+                <contentMiddle>
+                    <Title id="homeBrandTitle" text="빼빼로 증권거래소" level="H2" class="peperoBrandTitle" />
+                </contentMiddle>
+            </Bar>
+        </customHeader>
         <content>
             <VBox id="homeContent" class="sapUiResponsiveContentPadding sapUiMediumMarginTop">
                 <Text id="homeNotice" text="화면 이동 확인용 기본 화면입니다. 게임 기능은 구현 예정입니다." class="sapUiSmallMarginBottom" />
