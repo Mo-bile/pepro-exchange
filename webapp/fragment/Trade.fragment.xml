@@ -1,3 +1,118 @@
-<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
-    <!-- C / JJY: 주문·자산 UI 작성 예정 -->
+<!-- C / JJY: 주문·자산 UI 작성 예정 -->
+<!--Market.view.xml에는 팝업 자체를 직접 다 때려넣는 게 아니라, 
+“매매” 버튼만 두고, 그 버튼을 눌렀을 때 Trade.fragment.xml을 열도록 연결하는 식으로 구현할 것임-->
+<!-- <Button
+    text="매매하기"
+    press=".onOpenTrade" /> 이것만 추가하면 됩니다 -->
+
+<!-- controllerName="pepero.exchange.peperoexchange.controller.Market"
+xmlns:mvc="sap.ui.core.mvc"
+xmlns="sap.m"
+xmlns:t="sap.ui.table"
+xmlns:u="sap.ui.unified"
+xmlns:c="sap.ui.core"
+xmlns:viz="sap.viz.ui5.controls"
+xmlns:layout="sap.ui.layout"
+xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+xmlns:viz.data="sap.viz.ui5.data" -->
+
+
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Dialog
+        id="tradeDialog"
+        title="빼빼로 매매"
+        contentWidth="26rem">
+
+        <VBox class="sapUiMediumMargin">
+
+            <!-- 현재 보유 현금 -->
+            <Title text="주문" level="H3" />
+
+            <Text
+                text="현금: {game>/cash} PPR"
+                class="sapUiSmallMarginBottom" />
+
+            <!-- 종목 선택 -->
+            <Label text="종목" />
+
+            <Select
+                id="stockSelect"
+                width="100%"
+                items="{game>/stocks}"
+                change=".onStockChange">
+
+                <core:Item
+                    key="{game>id}"
+                    text="{game>name}" />
+
+            </Select>
+
+            <!-- 선택한 종목 현재가 -->
+            <Text
+                id="currentPriceText"
+                text="현재가: -"
+                class="sapUiSmallMarginTop" />
+
+            <!-- 수량 입력 -->
+            <Label
+                text="수량"
+                class="sapUiSmallMarginTop" />
+
+            <Input
+                id="qtyInput"
+                type="Number"
+                width="100%"
+                placeholder="매매 수량을 입력하세요"
+                liveChange=".onQuantityChange" />
+
+            <!-- 주문 예상 정보 -->
+            <Text
+                id="expectedAmountText"
+                text="예상 거래금액: 0 PPR"
+                class="sapUiSmallMarginTop" />
+
+            <Text
+                id="feeText"
+                text="수수료: 0 PPR" />
+
+            <!-- 매수 / 매도 -->
+            <HBox class="sapUiSmallMarginTop">
+
+                <Button
+                    text="매수"
+                    type="Emphasized"
+                    press=".onBuy" />
+
+                <Button
+                    text="매도"
+                    class="sapUiTinyMarginBegin"
+                    press=".onSell" />
+
+            </HBox>
+
+            <!-- 보유현황 -->
+            <Title
+                text="보유 현황"
+                level="H4"
+                class="sapUiMediumMarginTop" />
+
+            <Text
+                id="holdingText"
+                text="보유수량: 0주" />
+
+        </VBox>
+
+        <endButton>
+            <Button
+                text="닫기"
+                press=".onCloseTrade" />
+        </endButton>
+
+    </Dialog>
+
 </core:FragmentDefinition>
+
+    
