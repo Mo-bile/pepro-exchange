@@ -11,6 +11,77 @@
         </customHeader>
         <content>
             <VBox id="marketContent" class="sapUiResponsiveContentPadding sapUiMediumMarginTop">
+
+            <VBox id="MarketCard" width='100%' class="peperoCard">
+
+                <!-- 시장 정보 -->
+                <Title text="시장 현황" level="H3" class="sapUiSmallMarginBottom"/>
+                <HBox wrap="Wrap" class="sapUiMediumMarginBottom">
+                    <!-- 남은 시간 -->
+                    <VBox class="sapUiMediumMarginEnd">
+                        <Label text="남은 시간"/>
+                        <Text text="{path: 'game>/remainingMs',
+                        formatter: '.formatRemainingTime'}"/>
+                    </VBox>
+
+                    <!-- 현금 -->
+                    <VBox class="sapUiMediumMarginEnd">
+                        <Label text="보유 현금(PPR)"></Label>
+                        <Text text="{game>/cash}"/>
+                    </VBox>
+
+                    <!-- 총자산 -->
+                     <VBox>
+                    <Label text="총자산 (PPR)" />
+                    <Text text="{game>/totalAssets}" />
+                </VBox>
+
+            </HBox>
+
+            <!-- 2. 종목 목록 -->
+            <Table id="marketStocksTable"
+                   items="{game>/stocks}"
+                   width="100%"
+                   class="sapUiMediumMarginBottom">
+
+                <headerToolbar>
+                    <Toolbar>
+                        <Title text="종목 목록" level="H3" />
+                    
+                 <!-- 개발용 가격 변경 테스트 버튼
+                <Button text=" 가격병경 테스트 버튼" press=".onChangePrices"
+                type="Emphasized"/> -->
+                    </Toolbar>
+                </headerToolbar>
+
+                <columns>
+                    <Column>
+                        <Text text="종목명" />
+                    </Column>
+
+                    <Column hAlign="End">
+                        <Text text="현재가 (PPR)" />
+                    </Column>
+
+                    <Column hAlign="End">
+                        <Text text="보유 수량" />
+                    </Column>
+                </columns>
+
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{game>name}" />
+                            <Text text="{game>price}" />
+                            <Text text="{game>quantity}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+
+            </Table>
+            
+            
+            </VBox>
                 <VBox id="marketCard" width="100%" class="peperoCard">
                     <Text id="marketNotice" text="화면 이동 확인용 기본 화면입니다. 게임 기능은 구현 예정입니다." class="sapUiSmallMarginBottom" />
                     <Button id="challengeButton" text="11.11초 챌린지로 이동" press=".onChallenge" type="Emphasized" class="sapUiSmallMarginBottom" />
