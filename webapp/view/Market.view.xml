@@ -1,5 +1,11 @@
-<mvc:View controllerName="pepero.exchange.peperoexchange.controller.Market"
-    xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+<mvc:View
+    controllerName="pepero.exchange.peperoexchange.controller.Market"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds">
     <!-- B / JHJ: 화면 이동만 연결한 기본 화면 -->
     <Page id="marketPage" title="빼빼로 시장">
         <customHeader>
@@ -39,46 +45,140 @@
             </HBox>
 
             <!-- 2. 종목 목록 -->
-            <Table id="marketStocksTable"
-                   items="{game>/stocks}"
-                   width="100%"
-                   class="sapUiMediumMarginBottom">
+           
+<!-- 차트 + 종목 목록 : 좌우 2열 -->
+<l:Grid
+    width="100%"
+    hSpacing="1"
+    vSpacing="1"
+    defaultSpan="XL12 L12 M12 S12">
 
-                <headerToolbar>
-                    <Toolbar>
-                        <Title text="종목 목록" level="H3" />
-                    
-                 <!-- 개발용 가격 변경 테스트 버튼
-                <Button text=" 가격병경 테스트 버튼" press=".onChangePrices"
-                type="Emphasized"/> -->
-                    </Toolbar>
-                </headerToolbar>
+    <!-- 왼쪽 : 선택한 종목의 차트 -->
+    <VBox
+        width="100%"
+        class="peperoCard">
+
+        <layoutData>
+            <l:GridData span="XL7 L7 M12 S12"/>
+        </layoutData>
+
+        <Title
+            text="{chart>/stockName}"
+            level="H3"
+            class="sapUiSmallMarginBottom"/>
+
+        <ObjectNumber
+            number="{chart>/price}"
+            unit="PPR"
+            class="sapUiSmallMarginBottom"/>
+
+        <viz:VizFrame
+            id="marketPriceChart"
+            vizType="line"
+            width="100%"
+            height="330px">
+
+            <viz:dataset>
+                <viz.data:FlattenedDataset
+                    data="{chart>/history}">
+
+                    <viz.data:dimensions>
+                        <viz.data:DimensionDefinition
+                            name="시간"
+                            value="{chart>time}"/>
+                    </viz.data:dimensions>
+
+                    <viz.data:measures>
+                        <viz.data:MeasureDefinition
+                            name="가격"
+                            value="{chart>price}"/>
+                    </viz.data:measures>
+
+                </viz.data:FlattenedDataset>
+            </viz:dataset>
+
+            <viz:feeds>
+                <viz.feeds:FeedItem
+                    uid="valueAxis"
+                    type="Measure"
+                    values="가격"/>
+
+                <viz.feeds:FeedItem
+                    uid="categoryAxis"
+                    type="Dimension"
+                    values="시간"/>
+            </viz:feeds>
+
+        </viz:VizFrame>
+
+        <Button
+            text="매매하기"
+            press=".onOpenTrade"
+            type="Emphasized"
+            width="100%"
+            class="sapUiSmallMarginTop"/>
+
+    </VBox>
+
+    <!-- 오른쪽 : 전체 종목 목록 -->
+    <VBox
+        width="100%"
+        class="peperoCard">
+
+        <layoutData>
+            <l:GridData span="XL5 L5 M12 S12"/>
+        </layoutData>
+
+        <Title
+            text="전체 종목 (24)"
+            level="H3"
+            class="sapUiSmallMarginBottom"/>
+
+        <ScrollContainer
+            height="430px"
+            vertical="true"
+            horizontal="false"
+            width="100%">
+
+            <Table
+                id="marketStocksTable"
+                items="{game>/stocks}"
+                width="100%"
+                mode="SingleSelectMaster"
+                selectionChange=".onSelectStock">
 
                 <columns>
                     <Column>
-                        <Text text="종목명" />
+                        <Text text="종목명"/>
                     </Column>
 
                     <Column hAlign="End">
-                        <Text text="현재가 (PPR)" />
+                        <Text text="현재가"/>
                     </Column>
 
                     <Column hAlign="End">
-                        <Text text="보유 수량" />
+                        <Text text="보유량"/>
                     </Column>
                 </columns>
 
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <Text text="{game>name}" />
-                            <Text text="{game>price}" />
-                            <Text text="{game>quantity}" />
+                            <Text text="{game>name}"/>
+                            <Text text="{game>price}"/>
+                            <Text text="{game>quantity}"/>
                         </cells>
                     </ColumnListItem>
                 </items>
 
             </Table>
+
+        </ScrollContainer>
+
+    </VBox>
+
+</l:Grid>
+
             
             
             </VBox>
