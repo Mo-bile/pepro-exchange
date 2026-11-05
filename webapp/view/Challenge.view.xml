@@ -10,46 +10,120 @@
             </Bar>
         </customHeader>
         <content>
+        <!--
             <VBox id="challengeContent" class="sapUiResponsiveContentPadding sapUiMediumMarginTop">
                 <VBox id="challengeCard" width="100%" class="peperoCard">
                     <Text id="challengeNotice" text="화면 이동 확인용 기본 화면입니다. 게임 기능은 구현 예정입니다." class="sapUiSmallMarginBottom" />
                     <Button id="returnButton" text="시장으로 돌아가기" press=".onMarket" type="Emphasized" class="sapUiSmallMarginBottom" />
                 </VBox>
             </VBox>
-            <Panel width="80%">
+        -->
+         <Button id="returnButton" text="시장으로 돌아가기" press=".onMarket" type="Emphasized" class="sapUiSmallMarginBottom" />
             <VBox width="100%" 
                   alignItems="Center" 
                   class="sapUiSmallMarginBottom"
                   justifyContent="Center">
-            <HBox>
-                <!--<Image src="/>-->
-                <Title text="HAPPY PEPERO DAY" class="sapUiSmallMarginBottom" level="H1"/>
+            <Panel width="800px" class="peperoCard peperoGameFrame">
+
+            <!-- HAPPY PEPERO DAY 타이틀 -->
+            <VBox width="100%" alignItems="Center" class="sapUiSmallMarginBottom">
+
+            <HBox  alignItems="Center" justifyContent="Center">
+                <Image src="/image/pepero_individual_pngs/decoration_heart_choco.png"
+                       width="20px" height="20px"/>
+                <Title text="HAPPY PEPERO DAY"
+                       class="peperoBrandTitle peperoMainTitle sapUiTinyMarginTop" 
+                       level="H1"/>
+                <Image src="/image/pepero_individual_pngs/decoration_heart_choco.png"
+                       width="20px" height="20px" />
             </HBox>
-                <Title text="11.11 CHALLENGE" class="sapUiSmallMarginBottom" level="H3"/>
-                <Text text="11.11초 빼빼로를 잡아보세요" class="peperoBrandTitle"/>
-            <HBox>
-                <!--<Image src=  이미지 링크 넣기 />-->
-                <Title text="II.II" class="sapUiSmallMarginBottom" level="H1"/>
-                <!--<Image src=  이미지 링크 넣기 />-->
-            </HBox>
-            
-             <Panel width="100%" class="peperoCard">
+            </VBox>
+
+              <!-- 11.11 챌린지 이미지 -->
                 <VBox width="100%" 
                   alignItems="Center" 
-                  class="sapUiSmallMarginBottom"
                   justifyContent="Center">
-                    <Text text="타이머 띄우기" id="text"></Text>
-                    <Text text="TARGET 11.11 SEC"></Text>
+
+                <HBox justifyContent="Center"
+                      class="peperoChallengeTitle">
+
+                <Image src="/image/pepero_individual_pngs/title.png"
+                        width="300px" />
+                </HBox>
+                </VBox>
+
+            <HBox  justifyContent="Center">
+                <Image src="/image/pepero_individual_pngs/pepero_01_pink_choco.png"
+                       width="40px" height="50px"/>
+                <Image src="/image/pepero_individual_pngs/pepero_03_choco_stripes.png"
+                       width="40px" height="50px"/>
+                 <Image src="/image/pepero_individual_pngs/decoration_heart_pink.png"
+                       width="40px" height="30px" class="sapUiTinyMarginTop"/>
+                <Image src="/image/pepero_individual_pngs/pepero_04_pink_stripes.png"
+                       width="40px" height="50px"/>
+                <Image src="/image/pepero_individual_pngs/pepero_06_cookies_cream.png"
+                       width="40px" height="50px"/>
+          
+            </HBox>
+
+            <!-- 타이머 박스 -->
+
+            <VBox width="100%" alignItems="Center">
+                <Panel width="600px" class="peperoTimerBox sapUiMediumMarginTop" >
+
+                    <VBox width="100%" alignItems="Center">
+                <!-- 타이머 제목 -->
+                    <Text text="SWEET STOPWATCH" wrapping="false"
+                          class="peperoBrandTitle sapUiSmallMarginBottom"/>
+                    <Title id="text"
+                           text="{game>/challenge/displayTime}"
+                           class="peperoTime peperoTimePlate" 
+                           level="H1"/>
+                 <!-- 타이머 시간 -->
+                    <Text text="TARGET 11.11 SEC" wrapping="false"
+                           class="peperoTarget sapUiSmallMarginTop" />
                 </VBox>
                 </Panel>
-                <HBox>
-                    <Button icon="sap-icon://media-play" text="START" press="start()" width="7rem"/>
-                    <Button icon="sap-icon://media-pause" text="STOP" press="stop()" width="7rem"/>
-                    <Button icon="sap-icon://media-rewind" text="RETRY" press="retry()" width="7rem"/>
+             </VBox>
+
+                <HBox alignItems="Center" justifyContent="Center" class="sapUiMediumMarginTop">
+
+                <!-- 왼쪽 도트아트 -->
+                    <Image src="/image/pepero_individual_pngs/decoration_small_hearts.png"
+                           width="100px" height="50px"
+                           class="sapUiSmallMarginEnd" />
+        
+                 <!-- START 버튼 -->
+                    <Button text="START" 
+                            icon="sap-icon://media-play"
+                            width="11rem"
+                            class="peperoGameButton peperoStart"
+                            visible="{= ${game>/challenge/status} === 'UNUSED' }" 
+                            press=".onStart" />
+
+                 <!-- STOP 버튼 -->
+                    <Button text="STOP" 
+                            icon="sap-icon://media-pause"
+                            width="11rem"
+                            class="peperoGameButton peperoStop"
+                            visible="{= ${game>/challenge/status} === 'ACTIVE' }" 
+                            press=".onStop" />
+
+                <!-- RETRY 버튼 -->
+                    <Button text="RETRY" 
+                            icon="sap-icon://refresh"
+                            width="11rem"
+                            class="peperoGameButton peperoRetry"
+                            visible="{= ${game>/challenge/status} === 'RESOLVED' }" 
+                            press=".onRetry" />
+
+                <!-- 오른쪽 도트아트 -->
+                    <Image src="/image/pepero_individual_pngs/decoration_small_hearts.png"
+                           width="100px" height="50px"
+                           class="sapUiSmallMarginBegin" />
                 </HBox>
-    
-            </VBox>
             </Panel>
+            </VBox>
         </content>
     </Page>
 </mvc:View>
