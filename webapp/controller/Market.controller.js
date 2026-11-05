@@ -1,9 +1,10 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "pepero/exchange/peperoexchange/logic/Trade",
-    "sap/m/MessageToast"
+    "sap/m/MessageToast",
+    "sap/ui/model/json/JSONModel"
             
-], function (Controller, Trade, MessageToast) {
+], function (Controller, Trade, MessageToast, JSONModel) {
     "use strict";
 
     // B / JHJ: 화면 이동만 담당. 게임 로직은 구현 예정.
@@ -28,6 +29,76 @@ sap.ui.define([
             this._oMarketRoute = this.getOwnerComponent().getRouter().getRoute("RouteMarket");
 
             this._oMarketRoute.attachPatternMatched(this._onEnterMarket, this);
+            
+                // ========== 뉴스 데이터 JSONModel ==========
+
+                // 뉴스 JSON을 저장할 모델 생성
+            const oNewsDataModel = new JSONModel();
+
+            // newsData라는 이름으로 등록
+            this.getView().setModel(oNewsDataModel, "newsData");
+
+            // 뉴스 데이터 로딩 여부
+            this._bNewsLoaded = false;
+            this._bStartAfterLoad = false;
+
+            // JSON 파일 로딩 완료 시 실행
+            oNewsDataModel.attachRequestCompleted(function () {
+
+                // JSON 안의 events 배열 가져오기
+                const aEvents = oNewsDataModel.getProperty("/events");
+
+                // 뉴스가 최소 3개 있는지 확인
+                if (!Array.isArray(aEvents) || aEvents.length < 3) {
+                    MessageToast.show("뉴스 데이터가 부족합니다.");
+                    return;
+                }
+
+                this._bNewsLoaded = true;
+
+                console.log("뉴스 JSON 로딩 완료!");
+                console.log(aEvents);
+
+                // JSON 로딩을 기다리는 중이었다면 시장 시작
+                if (this._bStartAfterLoad) {
+                    this._onEnterMarket();
+                }
+
+            }, this);
+
+            // JSON 로딩 실패 시
+            oNewsDataModel.attachRequestFailed(function () {
+                MessageToast.show("뉴스 JSON 파일을 불러오지 못했습니다.");
+            });
+
+            // 실제 JSON 파일 불러오기
+            oNewsDataModel.loadData(
+                sap.ui.require.toUrl(
+                    "pepero/exchange/peperoexchange/json/NewsEvents.json"
+                )
+            );
+
+
+            // ========== 팝업 표시용 JSONModel ==========
+
+            const oNewsModel = new JSONModel({
+                title: "",
+                body: "",
+                effectText: ""
+            });
+
+            // news라는 이름으로 등록
+            this.getView().setModel(oNewsModel, "news");
+
+
+            // ========== 뉴스 이벤트 변수 초기화 ==========
+
+            this._aNewsTicks = [];
+            this._iNewsIndex = 0;
+            this._aNewsPool = [];
+
+            this._oNewsDialog = null;
+            this._bNewsConfirmed = false;
         },
         
         // Market 화면 진입 시 실행
@@ -40,6 +111,14 @@ sap.ui.define([
                 return;
             }
 
+             // JSON 데이터 로딩이 끝나지 않았다면 기다림
+            if (!this._bNewsLoaded) {
+                this._bStartAfterLoad = true;
+                return;
+            }
+
+            this._bStartAfterLoad = false;
+
             // 혹시 남아 있는 타이머가 있다면 제거
             this._clearMarketTimer();
 
@@ -49,8 +128,30 @@ sap.ui.define([
             // 마지막으로 가격을 변경한 회차
             this._iLastPriceTick = 0;
 
+            this._aNewsTicks = [
+                6 + Math.floor(Math.random() * 5),
+                15 + Math.floor(Math.random() * 7),
+                26 + Math.floor(Math.random() * 7)
+            ];
+
+            // 첫 번째 뉴스부터 시작
+            this._iNewsIndex = 0;
+
+            // JSON 파일에서 뉴스 배열 가져오기
+            const oNewsDataModel = this.getView().getModel("newsData");
+
+            const aNews = oNewsDataModel.getProperty("/events");
+
+            // 원본을 보존하기 위해 배열 복사
+            this._aNewsPool = aNews.slice();
+
+            console.log("뉴스 발생 회차:", this._aNewsTicks);
+
+
+
             // 게임 상태를 진행 중으로 변경
             oGameModel.setProperty("/status", "running");
+            oGameModel.setProperty("/pauseReason", null);
 
             // 100ms 간격으로 시간 갱신 함수 실행
             this._iTimerHandle = setInterval(
@@ -83,12 +184,60 @@ sap.ui.define([
             // 2. 아직 실행하지 않은 가격 변경을 처리
             while (this._iLastPriceTick < iDueTick) {
 
-            // 기존에 만든 24종목 가격 변경 함수 호출
-            this.onChangePrices();
+                // 이번에 실행할 가격 갱신 회차
+                const iNextTick = this._iLastPriceTick + 1;
 
-            // 가격 변경 횟수 1 증가
-            this._iLastPriceTick++;
-}
+                // 뉴스가 없으면 null
+                let oNews = null;
+
+                // 아직 발생할 뉴스가 남아 있다면
+                if (this._iNewsIndex < this._aNewsTicks.length) {
+
+                    // 이번 가격 갱신 회차가 뉴스 발생 시점인지 확인
+                    if (iNextTick === this._aNewsTicks[this._iNewsIndex]) {
+
+                        // 뉴스 목록에서 랜덤으로 하나 선택
+                        const iRandom = Math.floor(
+                            Math.random() * this._aNewsPool.length
+                        );
+
+                        // 선택한 뉴스를 가져오고 배열에서 제거
+                        oNews = this._aNewsPool.splice(iRandom, 1)[0];
+
+                        // 다음 뉴스 순서로 이동
+                        this._iNewsIndex++;
+
+                        // 일단 콘솔에서 뉴스 발생 확인
+                        console.log("뉴스 발생!");
+                        console.log(oNews.title);
+                        console.log("변동률:", oNews.rate);
+                    }
+                }
+
+                // 기존 주가 변경 함수 호출
+                // 뉴스가 있으면 뉴스 변동률 적용
+                this.onChangePrices(oNews);
+
+                // 가격 변경 회차 증가
+                this._iLastPriceTick = iNextTick;
+
+                
+                // ========== 뉴스 발생 시 팝업 표시 ==========
+
+                if (oNews) {
+
+                    // 1. 뉴스가 발생한 시점에서 시장 시간 정지
+                    this._pauseForNews(iNextTick * 5000);
+
+                    // 2. 뉴스 팝업 열기
+                    this._openNews(oNews);
+
+                    // 3. 현재 함수 실행 종료
+                    return;
+                }
+
+            }
+
 
             // 3분(180000ms)에서 경과시간 차감
             const iRemainingMs = Math.max(0, 180000 - iElapsedMs);
@@ -115,6 +264,169 @@ sap.ui.define([
                 this._iTimerHandle = null;
             }
         },
+
+        
+        // 뉴스가 발생했을 때 시장을 정지하는 함수
+        _pauseForNews: function (iElapsedMs) {
+
+            // 1. 공통 game 모델 가져오기
+            const oGameModel = this.getOwnerComponent().getModel("game");
+
+            // 2. 현재까지 진행된 시장 시간 저장
+            this._iAccumulatedMs = iElapsedMs;
+
+            // 3. 남은 시간 계산
+            const iRemainingMs = Math.max(0, 180000 - iElapsedMs);
+
+            // 4. 화면에 남은 시간 반영
+            oGameModel.setProperty("/remainingMs", Math.ceil(iRemainingMs));
+
+            // 5. 시장 상태를 일시정지로 변경
+            oGameModel.setProperty("/status", "paused");
+
+            // 6. 뉴스 때문에 정지했다는 사실 저장
+            oGameModel.setProperty("/pauseReason", "news");
+
+            // 7. 기존 타이머 정지
+            this._clearMarketTimer();
+
+            console.log("뉴스로 시장 일시정지!");
+        },
+
+        
+        // 뉴스 확인 후 시장을 다시 시작하는 함수
+        _resumeAfterNews: function () {
+
+            // 1. game 모델 가져오기
+            const oGameModel = this.getOwnerComponent().getModel("game");
+
+            // 2. 뉴스 때문에 정지된 상태인지 확인
+            if (
+                oGameModel.getProperty("/status") !== "paused" ||
+                oGameModel.getProperty("/pauseReason") !== "news"
+            ) {
+                return;
+            }
+
+            // 3. 시장 진행 상태로 변경
+            oGameModel.setProperty("/status", "running");
+            oGameModel.setProperty("/pauseReason", null);
+
+            // 4. 현재 시각부터 다시 시간 측정
+            this._iSegmentStart = performance.now();
+
+            // 5. 중복 타이머 방지
+            this._clearMarketTimer();
+
+            // 6. 시장 타이머 다시 실행
+            this._iTimerHandle = setInterval(
+                this._updateMarketTime.bind(this),
+                100
+            );
+
+            console.log("뉴스 확인! 시장 재개!");
+        },
+
+        
+        // 뉴스 팝업 열기
+        _openNews: async function (oNews) {
+
+            // 1. 뉴스 모델 가져오기
+            const oNewsModel = this.getView().getModel("news");
+
+            // 2. 변동률 안내 문구 만들기
+            let sEffectText = "";
+
+            if (oNews.scope === "all") {
+                sEffectText = "전체 종목 ";
+            } else {
+                sEffectText = "특정 종목 ";
+            }
+
+            if (oNews.rate > 0) {
+                sEffectText += "+" + oNews.rate + "% 상승!";
+            } else {
+                sEffectText += oNews.rate + "% 하락!";
+            }
+
+            // 3. 팝업 모델에 뉴스 데이터 저장
+            oNewsModel.setProperty("/title", oNews.title);
+            oNewsModel.setProperty("/body", oNews.body);
+            oNewsModel.setProperty("/effectText", sEffectText);
+
+            // 4. 확인 여부 초기화
+            this._bNewsConfirmed = false;
+
+            try {
+
+                // 매매창이 열려 있다면 닫기
+                if (this._oTradeDialog && this._oTradeDialog.isOpen()) {
+                    this._oTradeDialog.close();
+                }
+
+                // 5. 뉴스 팝업이 없으면 새로 생성
+                if (!this._oNewsDialog) {
+
+                    this._oNewsDialog = await this.loadFragment({
+                        name: "pepero.exchange.peperoexchange.fragment.NewsEvent"
+                    });
+
+                    // ESC 키로 닫지 못하도록 설정
+                    this._oNewsDialog.setEscapeHandler(function (oEscape) {
+                        oEscape.reject();
+                    });
+                }
+
+                // 6. 현재 뉴스 정지 상태인지 확인
+                const oGameModel = this.getOwnerComponent().getModel("game");
+
+                if (
+                    oGameModel.getProperty("/status") === "paused" &&
+                    oGameModel.getProperty("/pauseReason") === "news"
+                ) {
+                    // 7. 뉴스 팝업 열기
+                    this._oNewsDialog.open();
+                }
+
+            } catch (oError) {
+
+                console.error("뉴스 팝업 오류:", oError);
+                MessageToast.show("뉴스 팝업을 열지 못했습니다.");
+
+                // 오류 발생 시 시장 재개
+                this._resumeAfterNews();
+            }
+        },
+
+
+        // 뉴스 확인 버튼 클릭
+        onNewsConfirm: function () {
+
+            // 확인 버튼을 눌렀다는 사실 저장
+            this._bNewsConfirmed = true;
+
+            // 팝업 닫기
+            this._oNewsDialog.close();
+        },
+
+
+        // 뉴스 팝업이 완전히 닫혔을 때
+        onNewsAfterClose: function () {
+
+            // 확인 버튼을 눌렀는지 검사
+            if (this._bNewsConfirmed) {
+
+                this._bNewsConfirmed = false;
+
+                // 브라우저 탭이 보이는 상태에서만 재개
+                if (!document.hidden) {
+                    this._resumeAfterNews();
+                }
+            }
+        },
+
+
+
 
         // Controller가 파괴될 때 정리
         onExit: function () {
@@ -151,7 +463,7 @@ sap.ui.define([
 
         
         // 24개 종목의 현재가를 랜덤으로 변경
-        onChangePrices: function () {
+        onChangePrices: function (oNews) {
 
              // 1. 공통 game 모델 가져오기
             const oGameModel = this.getOwnerComponent().getModel("game");
@@ -167,7 +479,27 @@ sap.ui.define([
 
                 // 5. 랜덤으로 변동률 하나 선택
                 const iRandom = Math.floor(Math.random() * aRates.length);
-                const iRate = aRates[iRandom];
+                let iRate = aRates[iRandom];
+
+
+                // ========== 뉴스 효과 적용 ==========
+
+                // 뉴스가 발생한 경우에만 실행
+                if (oNews) {
+
+                    // 전체 종목에 영향을 주는 뉴스
+                    if (oNews.scope === "all") {
+                        iRate = oNews.rate;
+                    }
+
+                    // 특정 종목에 영향을 주는 뉴스
+                    else if (
+                        oNews.scope === "stock" &&
+                        oNews.stockId === aStocks[i].id
+                    ) {
+                        iRate = oNews.rate;
+                        }
+                }
 
             // 6. 현재 종목의 가격 가져오기
             const iPrice = aStocks[i].price;
