@@ -44,7 +44,12 @@
       "compact": true,
       "cozy": true
     },
-    "models": {},
+    "models": {
+      "game": {
+        "type": "sap.ui.model.json.JSONModel",
+        "uri": "json/gameInitialState.json"
+      }
+    },
     "resources": {
       "css": [
         {
