@@ -171,3 +171,8 @@
     border-radius: 8px;
     padding: 10px 45px;
 }
+
+.peperoApp .peperoGameFrame > .sapMPanelContent {
+    background-image: radial-gradient(#F4AFC4 1.2px, transparent 1.2px);
+    background-size: 16px 16px;
+}
