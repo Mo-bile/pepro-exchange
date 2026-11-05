@@ -18,24 +18,27 @@
                 </VBox>
             </VBox>
         -->
-         <Button id="returnButton" text="시장으로 돌아가기" press=".onMarket" type="Emphasized" class="sapUiSmallMarginBottom" />
             <VBox width="100%" 
                   alignItems="Center" 
-                  class="sapUiSmallMarginBottom"
+                  class="sapUiSmallMarginBottom sapUiMediumMarginTop"
                   justifyContent="Center">
+            <Button id="returnButton" 
+                    text="시장으로 돌아가기" press=".onMarket" 
+                    type="Emphasized" class="peperoGameButton peperoStart sapUiMediumMarginBottom" />
+
             <Panel width="800px" class="peperoCard peperoGameFrame">
 
             <!-- HAPPY PEPERO DAY 타이틀 -->
             <VBox width="100%" alignItems="Center" class="sapUiSmallMarginBottom">
 
             <HBox  alignItems="Center" justifyContent="Center">
-                <Image src="/image/pepero_individual_pngs/decoration_heart_choco.png"
-                       width="20px" height="20px"/>
+                <Image src="/image/pepero_individual_pngs/decoration_small_hearts.png"
+                       width="100px" height="50px"/>
                 <Title text="HAPPY PEPERO DAY"
                        class="peperoBrandTitle peperoMainTitle sapUiTinyMarginTop" 
                        level="H1"/>
-                <Image src="/image/pepero_individual_pngs/decoration_heart_choco.png"
-                       width="20px" height="20px" />
+                <Image src="/image/pepero_individual_pngs/decoration_small_hearts.png"
+                       width="100px" height="50px" />
             </HBox>
             </VBox>
 
