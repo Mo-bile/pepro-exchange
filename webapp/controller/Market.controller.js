@@ -108,6 +108,16 @@ sap.ui.define([
 
             const oGameModel = this.getOwnerComponent().getModel("game");
 
+            // 챌린지에서 시장으로 돌아온 경우
+            if (
+                oGameModel.getProperty("/status") === "paused" &&
+                oGameModel.getProperty("/pauseReason") === "challenge"
+            ) {
+                this._resumeAfterChallenge();
+                return;
+            }
+
+        
             // 새로운 게임일 때만 타이머 시작
             if (oGameModel.getProperty("/status") !== "ready") {
                 return;
@@ -332,6 +342,8 @@ sap.ui.define([
 
             console.log("뉴스 확인! 시장 재개!");
         },
+
+
 
         
         // 뉴스 팝업 열기
@@ -636,9 +648,52 @@ sap.ui.define([
         },
 
 
+        
+        // 11.11초 챌린지 화면으로 이동
         onChallenge: function () {
-            this.getOwnerComponent().getRouter().navTo("RouteChallenge");
+
+            // 1. game 모델 가져오기
+            const oGameModel = this.getOwnerComponent().getModel("game");
+
+            // 2. 챌린지로 이동하기 전 시장 시간 갱신
+            this._updateMarketTime();
+
+            // 3. 시장이 정상 진행 중인지 확인
+            if (oGameModel.getProperty("/status") !== "running") {
+                MessageToast.show("현재 챌린지에 입장할 수 없습니다.");
+                return;
+            }
+
+            // 4. 지금까지 진행된 시간 누적
+            this._iAccumulatedMs +=
+                performance.now() - this._iSegmentStart;
+
+            // 5. 남은 시간 저장
+            const iRemainingMs = Math.max(
+                0,
+                180000 - this._iAccumulatedMs
+            );
+
+            oGameModel.setProperty(
+                "/remainingMs",
+                Math.ceil(iRemainingMs)
+            );
+
+            // 6. 시장을 일시정지 상태로 변경
+            oGameModel.setProperty("/status", "paused");
+            oGameModel.setProperty("/pauseReason", "challenge");
+
+            // 7. 시장 타이머 정지
+            this._clearMarketTimer();
+
+            console.log("챌린지 입장! 시장 정지");
+
+            // 8. 챌린지 화면으로 이동
+            this.getOwnerComponent()
+                .getRouter()
+                .navTo("RouteChallenge");
         },
+
         onResult: function () {
             this.getOwnerComponent().getRouter().navTo("RouteResult");
         },
