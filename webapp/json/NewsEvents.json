@@ -1,0 +1,39 @@
+
+{
+    "events": [
+        {
+            "id": "breakup",
+            "title": "커플 500쌍 기습 이별!",
+            "body": "빼빼로데이를 앞두고 전국 커플들이 집단 이별을 선언했습니다!",
+            "scope": "all",
+            "rate": -5,
+            "image": "breakup.png"
+        },
+        {
+            "id": "solo",
+            "title": "솔로 연합의 반격!",
+            "body": "전국 솔로들이 빼빼로 공동구매를 시작했습니다!",
+            "scope": "all",
+            "rate": 5,
+            "image": "solo.png"
+        },
+        {
+            "id": "almond",
+            "title": "아몬드 집단 탈출 사건!",
+            "body": "아몬드들이 단체로 농장을 탈출해 공급에 비상이 걸렸습니다.",
+            "scope": "stock",
+            "stockId": "almond",
+            "rate": -5,
+            "image": "almond.png"
+        },
+        {
+            "id": "original",
+            "title": "역시 근본은 오리지널!",
+            "body": "SNS에서 오리지널 빼빼로 인증 열풍이 불고 있습니다.",
+            "scope": "stock",
+            "stockId": "original",
+            "rate": 5,
+            "image": "original.png"
+        }
+    ]
+}
