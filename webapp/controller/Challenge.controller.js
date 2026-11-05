@@ -27,6 +27,20 @@ sap.ui.define([
         // 2. 조장님이 만든 시장 화면 이동 버튼
         onMarket: function () {
 
+            // oModel에 game model을 불러옴
+            var oModel = this.getOwnerComponent().getModel("game") || this.getView().getModel("game");
+
+            // sStatus에 oModel을 잘 가져왔나 ? 참일 경우 oModel의 status를 불러옴 : 거짓일 경우 아무 것도 불러오지 않음
+            var sStatus = oModel ? oModel.getProperty("/challenge/status") : ""
+
+            // 챌린지 중 시장으로의 이동을 막는 if문
+            if(sStatus === "ACTIVE") {
+                // status가 ACTIVE여서 조건을 만족하는 경우, MessageToast를 띄우고,
+                MessageToast.show(`챌린지 진행 중에는 시장으로 이동하실 수 없습니다!`);
+                // return문이 실행되어 함수 밖으로 빠져나감
+                return;
+            }
+
             this.getOwnerComponent().getRouter().navTo("RouteMarket");
 
             // this.getOwnerComponet()
@@ -68,8 +82,14 @@ sap.ui.define([
                 var now = performance.now();                            // setInterval에 의해 시작 버튼을 누른 후 0.01초마다 반복하여 now에 기록
 
                 // 4. 지금 시간(now)에서 처음 START 버튼을 눌렀던 시간(realTime._startedAt)을 뺍니다.
-                var currentMs = now - realTime._startedAt;              // ('실시간으로 기록하고 있는 현재 시각' - '시작 버튼을 처음 누른 시간' = 지금까지 경과된 시간) 0.01초마다 반복하여 기록
+                var currentMs = now - realTime._startedAt;              // 현재까지 경과된 시간 = '실시간으로 기록하고 있는 현재 시각' - '시작 버튼을 처음 누른 시간' (0.01초마다 반복하여 기록)
                 var currentSec = (currentMs / 1000).toFixed(2);         // 경과된 밀리초를 소수점 2자리까지 1000으로 나눠 초단위로 보여줌. 마찬가지로 0.01초마다 반복
+
+                // 시작 버튼을 누르고 15초 경과 시, realTime 실시간 타이머를 자동 종료 기능
+                if(currentSec >= 15000) {
+                    realTime.onStop();
+                    return;
+                }
                 
                 // setInterval에 의한 계산된 초를 0.01초마다 화면 전광판 숫자에 실시간으로 업데이트
                 oModel.setProperty("/challenge/displayTime", currentSec);
@@ -80,7 +100,7 @@ sap.ui.define([
         // 4. 다빈 님의 STOP 버튼 클릭 시 (시간 계산 및 결과 처리)
         onStop: function () {
 
-            // 🛑 [추가] 돌아가던 실시간 타이머 멈추기
+            // 🛑 [추가] 돌아가던 실시간 타이머 멈추기(인터벌 기능 종료)
             clearInterval(this._timerId);
 
             var stoppedAt = performance.now();                  // 멈춘 시각 찍기
@@ -106,10 +126,11 @@ sap.ui.define([
             // [화면 전달] "game" 모델에 결과 업데이트
             oModel.setProperty("/challenge/status", "RESOLVED");                            // stop 버튼을 누르면 status가 "RESOLVED"로 설정 (xml에서.. 상태가 resolved일 때 retry 버튼 visible)
             oModel.setProperty("/challenge/displayTime", stoppedSec);                       // 멈춘 시점의 최종 시간을 화면 숫자로 고정
-            oModel.setProperty("/challenge/errorText", `목표와 ${errorSec}초 차이!`);         // stop 버튼을 누를 때, 오차 안내 문구 출력
-            MessageToast.show(`목표와 ${errorSec}초 차이!`);                                  // stop 버튼 누를 때, 오차 안내 문구 MessageToast로 출력
+            // oModel.setProperty("/challenge/errorText", `목표와 ${errorSec}초 차이!`);         // stop 버튼을 누를 때, 오차 안내 문구 출력
             oModel.setProperty("/challenge/result", resultStatus);                          // 성공 / 실패 / 타임아웃 판정 결과 저장
             oModel.setProperty("/session/canTrade", true);                                  // 주식 거래 잠금 해제
+
+            MessageToast.show(`목표와 ${errorSec}초 차이!`);                                  // stop 버튼 누를 때, 오차 안내 문구 MessageToast로 출력
 
         },
 
@@ -122,10 +143,19 @@ sap.ui.define([
 
             var oModel = this.getView().getModel("game"); // "game" 모델 불러오기
 
-            oModel.setProperty("/challenge/status", "UNUSED");              //상태를 unused로 초기화 (xml에서.. 상태가 unused일 때 start 버튼 visible)
-            oModel.setProperty("/challenge/displayTime", "00.00");          //화면 타이머 숫자를 "00.00"으로 초기화
-            oModel.setProperty("/challenge/errorText", ``);                 //이전 게임 결과 문구 지우기
-            oModel.setProperty("/session/canTrade", true);                  //주식 거래 기능 정상화 (안전장치)
+            oModel.setProperty("/challenge/status", "UNUSED");              // 상태를 unused로 초기화 (xml에서.. 상태가 unused일 때 start 버튼 visible)
+            oModel.setProperty("/challenge/displayTime", "00.00");          // 화면 타이머 숫자를 "00.00"으로 초기화
+            oModel.setProperty("/challenge/errorText", ``);                 // 이전 게임 결과 문구 지우기
+            oModel.setProperty("/session/canTrade", true);                  // 주식 거래 기능 정상화 (안전장치)
+
+        },
+
+        // 화면을 벗어날 때 인터벌 종료(타이머 자동 종료)
+        onExit: function () {
+
+            if(this._timerId) {
+                clearInterval(this._timerId);
+            }
 
         }
     });
