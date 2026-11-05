@@ -23,10 +23,13 @@ xmlns:viz.data="sap.viz.ui5.data" -->
 
     <Dialog
         id="tradeDialog"
-        title="빼빼로 매매"
-        contentWidth="26rem">
+        title="♥ 빼빼로 매매 ♥"
+        contentWidth="36rem"
+        class="peperoTradeDialog">
 
-        <VBox class="sapUiMediumMargin">
+        <VBox 
+            class="sapUiMediumMargin" 
+            alignItems="Center">
 
             <!-- 현재 보유 현금 -->
             <Title text="주문" level="H3" />
