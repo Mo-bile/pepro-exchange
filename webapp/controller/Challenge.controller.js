@@ -28,7 +28,8 @@ sap.ui.define([
             this._fnKeyDownHandler = this._onKeyDown.bind(this);
 
             // 브라우저 전체(window)에 키보드 누름 감지기를 설치합니다.
-            window.addEventListener("keydown", this._fnKeyDownHandler);
+            window.addEventListener("keydown", this._fnKeyDownHandler, true);
+            
 
         },
 
@@ -172,24 +173,24 @@ sap.ui.define([
 
         },
 
-        // [신규 추가] 키보드 입력 처리 함수
+        // [수정된 키보드 입력 처리 함수]
         _onKeyDown: function (e) {
-            // 눌린 키가 스페이스바(Space)인지 검사
+
             if (e.code === "Space" || e.keyCode === 32) {
+                // 🛑 1. 여기서 이벤트를 가로채서 다른 버튼들로 이벤트가 번지는 것을 막습니다!
+                e.stopPropagation(); 
+                
                 var oModel = this.getView().getModel("game");
                 if (!oModel) return;
 
-                // 현재 게임 상태("UNUSED", "ACTIVE" 등) 읽어오기
                 var sStatus = oModel.getProperty("/challenge/status");
 
-                // 1) 게임 시작 전(UNUSED)에 스페이스바를 누르면 ➔ 타이머 시작
                 if (sStatus === "UNUSED") {
-                    e.preventDefault(); // 스페이스바 누를 때 웹페이지 스크롤 내려가는 현상 차단
+                    e.preventDefault(); 
                     this.onStart();
                 } 
-                // 2) 게임 진행 중(ACTIVE)에 스페이스바를 누르면 ➔ 타이머 정지
                 else if (sStatus === "ACTIVE") {
-                    e.preventDefault(); // 스페이스바 스크롤 차단
+                    e.preventDefault();
                     this.onStop();
                 }
             }
@@ -205,7 +206,7 @@ sap.ui.define([
             // [onExit 함수 내부에 추가]
             // 화면을 벗어날 때 아까 등록한 키보드 감지기를 제거하여 메모리 누수 및 타 화면 오작동 방지
             if (this._fnKeyDownHandler) {
-                window.removeEventListener("keydown", this._fnKeyDownHandler);
+                window.removeEventListener("keydown", this._fnKeyDownHandler. true);
             }
 
         }

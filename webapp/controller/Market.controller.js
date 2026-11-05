@@ -15,6 +15,8 @@ sap.ui.define([
             //2. game 모델의 stocks 배열을 가져오기
             const aStocks = oGameModel.getProperty("/stocks");
             
+            // 차트 데이터 초기화
+            this._initializeChart();
 
             // 타이머를 관리할 변수
             this._iTimerHandle = null;
@@ -128,6 +130,10 @@ sap.ui.define([
             // 마지막으로 가격을 변경한 회차
             this._iLastPriceTick = 0;
 
+            // 새 게임을 시작하면 차트 기록도 초기화
+            this._initializeChart();
+
+            
             this._aNewsTicks = [
                 6 + Math.floor(Math.random() * 5),
                 15 + Math.floor(Math.random() * 7),
@@ -462,6 +468,85 @@ sap.ui.define([
         },
 
         
+        // ========== 차트 데이터 초기화 ==========
+        _initializeChart: function () {
+
+            // 1. 공통 모델에서 종목 가져오기
+            const oGameModel = this.getOwnerComponent().getModel("game");
+            const aStocks = oGameModel.getProperty("/stocks");
+
+            if (!aStocks || aStocks.length === 0) {
+                return;
+            }
+
+            // 2. 첫 번째 종목을 기본 선택
+            this._selectedStockId = aStocks[0].id;
+
+            // 3. 종목별 가격 기록을 저장할 객체
+            this._chartHistory = {};
+
+            // 4. 모든 종목에 최초 가격 기록
+            aStocks.forEach((oStock) => {
+                this._chartHistory[oStock.id] = [
+                    {
+                        time: "0초",
+                        price: oStock.price
+                    }
+                ];
+            });
+
+            // 5. 차트에 표시할 데이터
+            const oChartData = {
+                stockName: aStocks[0].name,
+                price: aStocks[0].price,
+                history: this._chartHistory[aStocks[0].id]
+            };
+
+            // 6. chart 모델 생성 또는 초기화
+            const oChartModel = this.getView().getModel("chart");
+
+            if (oChartModel) {
+                oChartModel.setData(oChartData);
+            } else {
+                this.getView().setModel(
+                    new JSONModel(oChartData),
+                    "chart"
+                );
+            }
+        },
+
+
+        // ========== 종목 클릭 시 차트 변경 ==========
+        onSelectStock: function (oEvent) {
+
+            // 1. 클릭한 종목 가져오기
+            const oItem = oEvent.getParameter("listItem");
+
+            if (!oItem) {
+                return;
+            }
+
+            const oStock = oItem.getBindingContext("game").getObject();
+
+            // 2. 선택한 종목 ID 저장
+            this._selectedStockId = oStock.id;
+
+            // 3. 차트 모델 가져오기
+            const oChartModel = this.getView().getModel("chart");
+
+            // 4. 선택 종목의 정보로 변경
+            oChartModel.setProperty("/stockName", oStock.name);
+            oChartModel.setProperty("/price", oStock.price);
+
+            // 5. 선택 종목의 가격 기록 표시
+            oChartModel.setProperty(
+                "/history",
+                this._chartHistory[oStock.id].slice()
+            );
+        },
+
+
+        
         // 24개 종목의 현재가를 랜덤으로 변경
         onChangePrices: function (oNews) {
 
@@ -509,7 +594,35 @@ sap.ui.define([
 
             // 8. 공통 모델에 변경된 가격 저장
             oGameModel.setProperty( "/stocks/" + i + "/price",iNextPrice);
-            }
+           
+            // 9. 현재 종목의 ID 가져오기
+            const sStockId = aStocks[i].id;
+
+
+            // 10. 변경된 가격을 차트 기록에 추가
+            this._chartHistory[sStockId].push({
+            time: ((this._iLastPriceTick || 0) + 1) * 5 + "초",
+            price: iNextPrice
+            });
+        }
+
+        // 11. 차트 모델 가져오기
+        const oChartModel = this.getView().getModel("chart");
+
+        // 12. 현재 선택한 종목 찾기
+        const oSelectedStock = aStocks.find(
+            (oStock) => oStock.id === this._selectedStockId
+        );
+
+        // 13. 선택한 종목의 차트 갱신
+        if (oChartModel && oSelectedStock) {
+
+            // 차트에 표시되는 현재가 변경
+            oChartModel.setProperty("/price", oSelectedStock.price);
+
+            // 차트의 가격 변동 기록 변경
+                oChartModel.setProperty( "/history",this._chartHistory[oSelectedStock.id].slice());
+        }
 
             //--- 임시임시임시임시
             // 9. 변경된 주가를 기준으로 총자산 다시 계산
