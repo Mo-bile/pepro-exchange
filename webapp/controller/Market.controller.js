@@ -178,6 +178,16 @@ sap.ui.define([
             // 8. 공통 모델에 변경된 가격 저장
             oGameModel.setProperty( "/stocks/" + i + "/price",iNextPrice);
             }
+
+            //--- 임시임시임시임시
+            // 9. 변경된 주가를 기준으로 총자산 다시 계산
+            const cash = oGameModel.getProperty("/cash");
+            const stocks = oGameModel.getProperty("/stocks");
+
+            const totalAssets = Trade.calculateAssets(cash, stocks);
+
+            // 10. 모델에 총자산 반영
+            oGameModel.setProperty("/totalAssets", totalAssets);
         },
 
 

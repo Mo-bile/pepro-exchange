@@ -36,3 +36,138 @@
     border-radius: 0.5rem;
     overflow-wrap: anywhere;
 }
+
+.peperoApp .peperoTimerBox {
+    background-color: var(--pepero-page-bg);
+    border: 2px solid var(--pepero-border);
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.peperoApp .peperoTime {
+    color: var(--pepero-brand);
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.peperoApp .peperoStartButton .sapMBtnInner {
+    background-color: var(--pepero-accent);
+    border: 1px solid var(--pepero-border);
+    border-radius: 10px;
+    color: var(--pepero-brand);
+}
+/* 버튼 공통 크기 */
+.peperoApp .peperoGameButton {
+    height: 3.5rem;
+}
+
+/* 버튼 내부 */
+.peperoApp .peperoGameButton .sapMBtnInner {
+    height: 3.5rem;
+    border-radius: 16px;
+    border: 2px solid var(--pepero-brand);
+    color: var(--pepero-brand);
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* START - 크림색 */
+.peperoApp .peperoStart .sapMBtnInner {
+    background-color: #5A382B;;
+}
+
+/* STOP - 딸기 핑크 */
+.peperoApp .peperoStop .sapMBtnInner {
+    background-color: #5A382B;
+}
+
+/* RETRY - 연한 베이지 */
+.peperoApp .peperoRetry .sapMBtnInner {
+    background-color: #5A382B;
+}
+/* 버튼 글씨와 아이콘 */
+.peperoApp .peperoGameButton .sapMBtnContent,
+.peperoApp .peperoGameButton .sapMBtnIcon {
+    color: #E8D8C3 !important;
+    line-height: 3.25rem;
+}
+
+/* 버튼 글씨 */
+.peperoApp .peperoGameButton .sapMBtnContent {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* 버튼 내부 가운데 정렬 */
+.peperoApp .peperoGameButton .sapMBtnInner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 12px;
+}
+
+/* 아이콘 위치 */
+.peperoApp .peperoGameButton .sapMBtnIcon {
+    position: static;
+    margin: 0;
+    line-height: 1;
+    color: var(--pepero-brand);
+}
+
+/* 글자 위치와 색상 */
+.peperoApp .peperoGameButton .sapMBtnContent {
+    line-height: normal;
+    color: var(--pepero-brand);
+    font-size: 18px;
+    font-weight: bold;
+}
+.peperoApp .peperoTimerBox .sapMPanelContent {
+    background-color: transparent;
+}
+/* 해피데이글자 */
+.peperoApp .peperoBrandTitle.peperoMainTitle {
+    font-size: 30px;
+    font-weight: bold;
+}
+/* 타이머 박스 : 픽셀 테두리 */
+.peperoApp .peperoTimerBox {
+    background-color: #FFF8F2;
+    border: 3px solid #5A382B;
+    border-radius: 4px;
+    box-shadow: 5px 5px 0 #F6B5C5;
+}
+
+/* 안쪽 픽셀 느낌 테두리 */
+.peperoApp .peperoTimerBox .sapMPanelContent {
+    background-color: transparent;
+    border: 2px dashed #F6B5C5;
+}
+
+/* 전체 판넬색 */
+.peperoApp .peperoGameFrame {
+    background-color: #FFFFFF;
+    border: 3px solid #5A382B;
+    border-radius: 4px;
+    box-shadow: 5px 5px 0 #F6B5C5;
+}
+
+.peperoApp .peperoGameFrame > .sapMPanelContent {
+    background-color: #FFFFFF;
+    border: 2px dashed #F6B5C5;
+}
+/* 타이머 숫자 핑크 배경 */
+.peperoApp .peperoTimePlate {
+    background-color: #FFD6E2;
+    border-radius: 8px;
+    padding: 10px 45px;
+}
+
+/* TARGET 노란 배경 */
+.peperoApp .peperoTarget {
+    background-color: #FFF0C3;
+    color: #5A382B;
+    border: 1px solid #F2C66D;
+    border-radius: 8px;
+    padding: 10px 45px;
+}
