@@ -123,6 +123,14 @@ sap.ui.define([], function () {
                 gross: gross,
                 fee: fee
             };
+        },
+
+        calculateAssets: function (cash, stocks) {
+            const stockValue = stocks.reduce((sum, stock) => {
+                return sum + stock.price * stock.quantity;
+            }, 0);
+
+            return cash + stockValue;
         }
 
     };
