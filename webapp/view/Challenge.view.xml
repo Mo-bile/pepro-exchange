@@ -16,6 +16,40 @@
                     <Button id="returnButton" text="시장으로 돌아가기" press=".onMarket" type="Emphasized" class="sapUiSmallMarginBottom" />
                 </VBox>
             </VBox>
+            <Panel width="80%">
+            <VBox width="100%" 
+                  alignItems="Center" 
+                  class="sapUiSmallMarginBottom"
+                  justifyContent="Center">
+            <HBox>
+                <!--<Image src="/>-->
+                <Title text="HAPPY PEPERO DAY" class="sapUiSmallMarginBottom" level="H1"/>
+            </HBox>
+                <Title text="11.11 CHALLENGE" class="sapUiSmallMarginBottom" level="H3"/>
+                <Text text="11.11초 빼빼로를 잡아보세요" class="peperoBrandTitle"/>
+            <HBox>
+                <!--<Image src=  이미지 링크 넣기 />-->
+                <Title text="II.II" class="sapUiSmallMarginBottom" level="H1"/>
+                <!--<Image src=  이미지 링크 넣기 />-->
+            </HBox>
+            
+             <Panel width="100%" class="peperoCard">
+                <VBox width="100%" 
+                  alignItems="Center" 
+                  class="sapUiSmallMarginBottom"
+                  justifyContent="Center">
+                    <Text text="타이머 띄우기" id="text"></Text>
+                    <Text text="TARGET 11.11 SEC"></Text>
+                </VBox>
+                </Panel>
+                <HBox>
+                    <Button icon="sap-icon://media-play" text="START" press="start()" width="7rem"/>
+                    <Button icon="sap-icon://media-pause" text="STOP" press="stop()" width="7rem"/>
+                    <Button icon="sap-icon://media-rewind" text="RETRY" press="retry()" width="7rem"/>
+                </HBox>
+    
+            </VBox>
+            </Panel>
         </content>
     </Page>
 </mvc:View>
