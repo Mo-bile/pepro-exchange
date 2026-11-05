@@ -1,0 +1,54 @@
+
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Dialog
+        id="newsDialog"
+        title="PEPERO BREAKING NEWS"
+        contentWidth="25rem"
+        stretchOnPhone="true"
+        afterClose=".onNewsAfterClose">
+
+        <VBox
+            alignItems="Center"
+            class="sapUiMediumMargin">
+
+            <!-- 뉴스 제목 -->
+            <Title
+                text="{news>/title}"
+                level="H3"
+                textAlign="Center"
+                class="sapUiSmallMarginBottom"/>
+
+            <!-- 뉴스 내용 -->
+            <Text
+                text="{news>/body}"
+                textAlign="Center"
+                wrapping="true"
+                class="sapUiSmallMarginBottom"/>
+
+            <!-- 주가 변동률 -->
+            <Title
+                text="{news>/effectText}"
+                level="H2"
+                textAlign="Center"
+                class="sapUiMediumMarginTop"/>
+
+            <Text
+                text="뉴스 속보로 시장이 일시정지되었습니다."
+                textAlign="Center"
+                class="sapUiSmallMarginTop"/>
+
+        </VBox>
+
+        <endButton>
+            <Button
+                text="확인하고 거래 재개"
+                type="Emphasized"
+                press=".onNewsConfirm"/>
+        </endButton>
+
+    </Dialog>
+
+</core:FragmentDefinition>
