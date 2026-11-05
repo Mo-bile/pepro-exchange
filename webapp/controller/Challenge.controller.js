@@ -8,15 +8,16 @@ sap.ui.define([
         // 1. 처음 화면 켜질 때 초기화 (game 모델 사용)
         onInit: function () {
 
-            var oModel = this.getView().getModel("game"); // 👈 "game" 모델 불러오기
+            var oModel = this.getView().getModel("game"); // "game" 모델 불러오기
 
             if (oModel) {
                 oModel.setProperty("/challenge/displayTime", "00.00");
                 oModel.setProperty("/challenge/status", "UNUSED");
                 // 다빈 님의 화면(XML View)에서 버튼을 보여주거나 숨기기 위해 필요합니다.
+                // e. g., <Text text = "{game/challenge/displaytime}" />
                 // status가 "UNUSED"일 때 ➔ 화면에 [START 버튼]만 보여주고, [STOP], [RETRY] 버튼은 숨깁니다.
                 // status가 "ACTIVE"일 때 ➔ [STOP 버튼]만 보여주고, [START] 버튼은 숨깁니다.
-                // status가 "RESOLVED"일 때 ➔ [RETRY 버튼]과 결과 문구를 보여줍니다.
+                // onInit 초기값 설정
 
             }
         },
@@ -40,7 +41,8 @@ sap.ui.define([
         // 3. 다빈 님의 START 버튼 클릭 시
         onStart: function () {
 
-                 // 👈 "game" 모델 불러오기
+            // "game" 모델 불러오기
+            var oModel = this.getView().getModel("game");
 
             // 현재 누른 시각을 수첩(_startedAt)에 기억
             this._startedAt = performance.now();
@@ -56,16 +58,16 @@ sap.ui.define([
         // 4. 다빈 님의 STOP 버튼 클릭 시 (시간 계산 및 결과 처리)
         onStop: function () {
 
-            var stoppedAt = performance.now(); // 멈춘 시각 찍기
-            var oModel = this.getView().getModel("game"); // 👈 "game" 모델 불러오기
+            var stoppedAt = performance.now();                  // 멈춘 시각 찍기
+            var oModel = this.getView().getModel("game");       // "game" 모델 불러오기
 
             // [계산 1] 경과 시간 및 오차 계산
-            var elapsedMs = stoppedAt - this._startedAt;    // 정지 시각 - 시작 누른 시각 = 경과된 시간
-            var errorMs = Math.abs(elapsedMs - 11110);      // 경과 시간 - 11110 = 오차 시간
+            var elapsedMs = stoppedAt - this._startedAt;        // 정지 시각 - 시작 누른 시각 = 경과된 시간
+            var errorMs = Math.abs(elapsedMs - 11110);          // 경과 시간 - 11110 = 오차 시간
 
             // [계산 2] 화면 표시용 텍스트 변환 (소수점 2자리)
             var stoppedSec = (elapsedMs / 1000).toFixed(2);     // 정지 시간: 경과된 밀리초를 1000으로 나누고 소수점 두 자리까지만 보여주는 것
-            var diffSec = (errorMs / 1000).toFixed(2);          // 오차 시간: 오차 밀리초를 1000으로 나누고 소수점 두 자리까지만 보여주는 것
+            var errorSec = (errorMs / 1000).toFixed(2);          // 오차 시간: 오차 밀리초를 1000으로 나누고 소수점 두 자리까지만 보여주는 것
 
             // [판정] 성공 / 실패 / 타임아웃 판정
             var resultStatus = "FAIL";
@@ -77,11 +79,11 @@ sap.ui.define([
             }
 
             // [화면 전달] "game" 모델에 결과 업데이트
-            oModel.setProperty("/challenge/status", "RESOLVED");                        //게임 상태를 '완료'로 변경
-            oModel.setProperty("/challenge/displayTime", stoppedSec);                   //멈춘 시점의 최종 시간을 화면 숫자로 고정
-            oModel.setProperty("/challenge/diffText", "목표와 " + diffSec + "초 차이!");  //오차 안내 문구 출력
-            oModel.setProperty("/challenge/result", resultStatus);                      //성공 / 실패 / 타임아웃 판정 결과 저장
-            oModel.setProperty("/session/canTrade", true);                              //주식 거래 잠금 해제
+            oModel.setProperty("/challenge/status", "RESOLVED");                        // status가 "RESOLVED"일 때 ➔ [RETRY 버튼]과 결과 문구를 보여줍니다.
+            oModel.setProperty("/challenge/displayTime", stoppedSec);                   // 멈춘 시점의 최종 시간을 화면 숫자로 고정
+            oModel.setProperty("/challenge/diffText", "목표와 " + errorSec + "초 차이!"); // 오차 안내 문구 출력
+            oModel.setProperty("/challenge/result", resultStatus);                      // 성공 / 실패 / 타임아웃 판정 결과 저장
+            oModel.setProperty("/session/canTrade", true);                              // 주식 거래 잠금 해제
 
         },
 
@@ -90,7 +92,7 @@ sap.ui.define([
         // 모든 상태를 처음으로 되돌리는 '초기화(리셋)' 코드
         onRetry: function () {
 
-            var oModel = this.getView().getModel("game"); // 👈 "game" 모델 불러오기
+            var oModel = this.getView().getModel("game"); // "game" 모델 불러오기
 
             oModel.setProperty("/challenge/status", "UNUSED");          //게임 상태를 다시 '시작 전'으로 리셋
             oModel.setProperty("/challenge/displayTime", "00.00");      //화면 타이머 숫자를 "00.00"으로 초기화
