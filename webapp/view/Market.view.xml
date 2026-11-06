@@ -55,7 +55,7 @@
 
     <!-- 왼쪽 : 선택한 종목의 차트 -->
     <VBox
-        width="100%"
+        width="40rem"
         class="peperoCard">
 
         <layoutData>
@@ -75,7 +75,7 @@
         <viz:VizFrame
             id="marketPriceChart"
             vizType="line"
-            width="100%"
+            width="35rem"
             height="330px">
 
             <viz:dataset>
@@ -122,7 +122,7 @@
 
     <!-- 오른쪽 : 전체 종목 목록 -->
     <VBox
-        width="100%"
+        width="30rem"
         class="peperoCard">
 
         <layoutData>
@@ -130,7 +130,7 @@
         </layoutData>
 
         <Title
-            text="전체 종목 (24)"
+            text="전체 빼빼로"
             level="H3"
             class="sapUiSmallMarginBottom"/>
 
@@ -149,7 +149,7 @@
 
                 <columns>
                     <Column>
-                        <Text text="종목명"/>
+                        <Text text="빼빼로 명"/>
                     </Column>
 
                     <Column hAlign="End">
