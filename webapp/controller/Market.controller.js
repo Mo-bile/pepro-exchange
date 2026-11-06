@@ -271,6 +271,39 @@ sap.ui.define([
             }
         },
 
+        // 챌린지에서 시장으로 복귀했을 때 타이머 재개
+        _resumeAfterChallenge: function () {
+
+            // 1. 공통 game 모델 가져오기
+            const oGameModel = this.getOwnerComponent().getModel("game");
+
+            // 2. 챌린지 때문에 정지된 상태인지 확인
+            if (
+                oGameModel.getProperty("/status") !== "paused" ||
+                oGameModel.getProperty("/pauseReason") !== "challenge"
+            ) {
+                return;
+            }
+
+            // 3. 기존 타이머 중복 실행 방지
+            this._clearMarketTimer();
+
+            // 4. 돌아온 시점부터 다시 시간 측정
+            this._iSegmentStart = performance.now();
+
+            // 5. 게임 상태를 정상 진행으로 변경
+            oGameModel.setProperty("/status", "running");
+            oGameModel.setProperty("/pauseReason", null);
+
+            // 6. 시장 타이머 다시 시작
+            this._iTimerHandle = setInterval(
+                this._updateMarketTime.bind(this),
+                100
+            );
+
+            console.log("챌린지 복귀! 시장 타이머 재개!");
+        },
+
         
         // 뉴스가 발생했을 때 시장을 정지하는 함수
         _pauseForNews: function (iElapsedMs) {
