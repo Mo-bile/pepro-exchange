@@ -76,7 +76,8 @@
             id="marketPriceChart"
             vizType="line"
             width="35rem"
-            height="330px">
+            height="330px"
+            vizProperties="{plotArea: {marker: {visible: false}}}">
 
             <viz:dataset>
                 <viz.data:FlattenedDataset
@@ -179,7 +180,6 @@
 
 </l:Grid>
 
-            
             
             </VBox>
                 <VBox id="marketCard" width="100%" class="peperoCard">
