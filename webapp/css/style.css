@@ -176,3 +176,36 @@
     background-image: radial-gradient(#F4AFC4 1.2px, transparent 1.2px);
     background-size: 16px 16px;
 }
+
+/*이하 전지윤 작성. 2026.11.06*/
+.peperoTradeDialog .sapMDialogSection {
+    background-color: #FFE8D6;
+}
+
+.peperoTradeDialog .tradeHeading {
+    color: #0a601d;
+}
+
+.peperoTradeDialog .brownPanel .sapMPanelContent {
+    background-color: #9e704f;
+}
+
+.peperoTradeDialog .pinkPanel .sapMPanelContent {
+    background-color: #c26796;
+}
+
+/* 매수 버튼 - 연두색 */
+.pepBuyButton .sapMBtnInner {
+    background: #83CC45 !important;
+    border-color: #5B9D2B !important;
+    color: white !important;
+    border-radius: 12px;
+}
+
+/* 매도 버튼 - 분홍색 */
+.pepSellButton .sapMBtnInner {
+    background: #F07898 !important;
+    border-color: #CC5072 !important;
+    color: white !important;
+    border-radius: 12px;
+}
