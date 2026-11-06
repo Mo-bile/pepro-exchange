@@ -69,6 +69,11 @@ sap.ui.define([
             // "game" 모델 불러오기
             var oModel = this.getView().getModel("game");
 
+            // 이미 게임이 진행 중(ACTIVE)이라면 스페이스바나 클릭을 다시 눌러도 중복 실행되지 않게 막음
+            if (oModel.getProperty("/challenge/status") === "ACTIVE") {
+                return;
+            }
+
             // 처음 시작 버튼을 누른 시각을 수첩(_startedAt)에 기억
             this._startedAt = performance.now();
 
@@ -95,28 +100,14 @@ sap.ui.define([
                 var currentSec = (currentMs / 1000).toFixed(2);         // 경과된 밀리초를 소수점 2자리까지 1000으로 나눠 초단위로 보여줌. 마찬가지로 0.01초마다 반복
 
                 // 시작 버튼을 누르고 15초 경과 시, realTime 실시간 타이머를 자동 종료 기능
-                if(currentSec >= 15000) {
+                if(currentMs >= 15000) {
                     realTime.onStop();
                     return;
                 }
                 
                 // setInterval에 의한 계산된 초를 0.01초마다 화면 전광판 숫자에 실시간으로 업데이트
                 oModel.setProperty("/challenge/displayTime", currentSec);
-            }, 10);                                                     // setInterval(~...10);은 10밀리초(0.01초) 간격으로 반복하겠다는 뜻
-
-                // [onStart 함수 시작 부분에 추가]
-                // 이미 게임이 진행 중(ACTIVE)이라면 스페이스바나 클릭을 다시 눌러도 중복 실행되지 않게 막음
-                if (oModel.getProperty("/challenge/status") === "ACTIVE") {
-                    return;
-                }
-
-                // -------------------------------------------------------------
-
-                // [onStop 함수 시작 부분에 추가]
-                // 진행 중(ACTIVE) 상태가 아니면(이미 멈췄거나 시작 전이면) 정지 로직이 중복 실행되지 않게 막음
-                if (oModel.getProperty("/challenge/status") !== "ACTIVE") {
-                    return;
-                }
+            }, 10);
 
         },
 
@@ -128,6 +119,11 @@ sap.ui.define([
 
             var stoppedAt = performance.now();                  // 멈춘 시각 찍기
             var oModel = this.getView().getModel("game");       // "game" 모델 불러오기
+
+            // 진행 중(ACTIVE) 상태가 아니면(이미 멈췄거나 시작 전이면) 정지 로직이 중복 실행되지 않게 막음
+            if (oModel.getProperty("/challenge/status") !== "ACTIVE") {
+                return;
+            }
 
             // [계산 1] 경과 시간 및 오차 계산
             var elapsedMs = stoppedAt - this._startedAt;        // 경과된 밀리초 = 정지 버튼 누른 시각 - 시작 버튼 누른 시각
@@ -146,14 +142,20 @@ sap.ui.define([
                 resultStatus = "SUCCESS";                       // 결과는 SUCCESS(성공)
             }
 
+            if (resultStatus === "SUCCESS") {
+                MessageToast.show(`성공!`);
+            } else if (resultStatus === "FAIL") {
+                MessageToast.show(`목표와 ${errorSec}초 차이!`);                              // stop 버튼 누를 때, 오차 안내 문구 MessageToast로 출력
+            } else {
+                MessageToast.show(`시간 초과!`);
+            }
+
             // [화면 전달] "game" 모델에 결과 업데이트
             oModel.setProperty("/challenge/status", "RESOLVED");                            // stop 버튼을 누르면 status가 "RESOLVED"로 설정 (xml에서.. 상태가 resolved일 때 retry 버튼 visible)
             oModel.setProperty("/challenge/displayTime", stoppedSec);                       // 멈춘 시점의 최종 시간을 화면 숫자로 고정
             // oModel.setProperty("/challenge/errorText", `목표와 ${errorSec}초 차이!`);         // stop 버튼을 누를 때, 오차 안내 문구 출력
             oModel.setProperty("/challenge/result", resultStatus);                          // 성공 / 실패 / 타임아웃 판정 결과 저장
             oModel.setProperty("/session/canTrade", true);                                  // 주식 거래 잠금 해제
-
-            MessageToast.show(`목표와 ${errorSec}초 차이!`);                                  // stop 버튼 누를 때, 오차 안내 문구 MessageToast로 출력
 
         },
 
@@ -206,7 +208,7 @@ sap.ui.define([
             // [onExit 함수 내부에 추가]
             // 화면을 벗어날 때 아까 등록한 키보드 감지기를 제거하여 메모리 누수 및 타 화면 오작동 방지
             if (this._fnKeyDownHandler) {
-                window.removeEventListener("keydown", this._fnKeyDownHandler. true);
+                window.removeEventListener("keydown", this._fnKeyDownHandler, true);
             }
 
         }
