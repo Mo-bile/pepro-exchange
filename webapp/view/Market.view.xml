@@ -7,42 +7,118 @@
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds">
     <!-- B / JHJ: 화면 이동만 연결한 기본 화면 -->
-    <Page id="marketPage" title="빼빼로 시장">
-        <customHeader>
-            <Bar id="marketHeader">
-                <contentMiddle>
-                    <Title id="marketBrandTitle" text="빼빼로 시장" level="H2" class="peperoBrandTitle" />
-                </contentMiddle>
-            </Bar>
-        </customHeader>
+    <Page id="marketPage" title="빼빼로 시장" showHeader="false" class="peperoMarketPage">
         <content>
-            <VBox id="marketContent" class="sapUiResponsiveContentPadding sapUiMediumMarginTop">
+    <VBox
+        id="marketContent"
+        width="100%"
+        class="sapUiResponsiveContentPadding">
 
-            <VBox id="MarketCard" width='100%' class="peperoCard">
+        <!-- 픽셀아트 상단 간판 -->
+        <VBox
+            id="marketHero"
+            width="100%"
+            class="marketPixelHero">
 
-                <!-- 시장 정보 -->
-                <Title text="시장 현황" level="H3" class="sapUiSmallMarginBottom"/>
-                <HBox wrap="Wrap" class="sapUiMediumMarginBottom">
-                    <!-- 남은 시간 -->
-                    <VBox class="sapUiMediumMarginEnd">
-                        <Label text="남은 시간"/>
-                        <Text text="{path: 'game>/remainingMs',
-                        formatter: '.formatRemainingTime'}"/>
-                    </VBox>
+            <HBox
+                width="100%"
+                justifyContent="Center"
+                alignItems="Center"
+                class="marketPixelHeroRow">
 
-                    <!-- 현금 -->
-                    <VBox class="sapUiMediumMarginEnd">
-                        <Label text="보유 현금(PPR)"></Label>
-                        <Text text="{game>/cash}"/>
-                    </VBox>
+                <!-- 왼쪽 데코 -->
+                <Image
+                    src="/image/market_ui/header_pepero_left.png"
+                    width="6rem"
+                    densityAware="false"/>
 
-                    <!-- 총자산 -->
-                     <VBox>
-                    <Label text="총자산 (PPR)" />
-                    <Text text="{game>/totalAssets}" />
-                </VBox>
+                <!-- 중앙 시장 간판 -->
+                <Image
+                    src="/image/market_ui/header_market_logo.png"
+                    width="20rem"
+                    densityAware="false"/>
+
+                <!-- 오른쪽 데코 -->
+                <Image
+                    src="/image/market_ui/header_pepero_right.png"
+                    width="6rem"
+                    densityAware="false"/>
 
             </HBox>
+
+        </VBox>
+
+        <!-- 기존 시장 현황 -->
+        <VBox id="MarketCard"
+              width="100%"
+              class="peperoCard">
+                <!-- 시장 현황: PNG 아이콘 + 실시간 데이터 -->
+<HBox
+    width="100%"
+    wrap="Wrap"
+    alignItems="Center"
+    justifyContent="SpaceBetween"
+    class="marketStatusRow sapUiMediumMarginBottom">
+
+    <!-- 시장 현황 제목 -->
+    <HBox alignItems="Center" class="marketStatusTitle">
+        <Image
+            src="/image/market_ui/icon_market_chart.png"
+            width="2.5rem"
+            densityAware="false"/>
+
+        <Title
+            text="시장 현황"
+            level="H3"/>
+    </HBox>
+
+    <!-- 남은 시간 -->
+    <HBox alignItems="Center" class="marketStatusItem">
+        <Image
+            src="/image/market_ui/icon_clock.png"
+            width="2.8rem"
+            densityAware="false"/>
+
+        <VBox class="marketStatusText">
+            <Label text="남은 시간"/>
+            <Text
+                text="{path: 'game>/remainingMs',
+                       formatter: '.formatRemainingTime'}"
+                class="marketStatusValue"/>
+        </VBox>
+    </HBox>
+
+    <!-- 보유 현금 -->
+    <HBox alignItems="Center" class="marketStatusItem">
+        <Image
+            src="/image/market_ui/icon_coins.png"
+            width="2.8rem"
+            densityAware="false"/>
+
+        <VBox class="marketStatusText">
+            <Label text="보유 현금(PPR)"/>
+            <Text
+                text="{game>/cash}"
+                class="marketStatusValue"/>
+        </VBox>
+    </HBox>
+
+    <!-- 총자산 -->
+    <HBox alignItems="Center" class="marketStatusItem">
+        <Image
+            src="/image/market_ui/icon_wallet.png"
+            width="2.8rem"
+            densityAware="false"/>
+
+        <VBox class="marketStatusText">
+            <Label text="총자산(PPR)"/>
+            <Text
+                text="{game>/totalAssets}"
+                class="marketStatusValue"/>
+        </VBox>
+    </HBox>
+
+</HBox>
 
             <!-- 2. 종목 목록 -->
            

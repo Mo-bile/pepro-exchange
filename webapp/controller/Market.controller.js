@@ -184,7 +184,7 @@ sap.ui.define([
             // 1. 현재까지 실행되어야 하는 가격 변경 횟수 계산
             const iDueTick = Math.min(
                 89,
-                Math.floor(iElapsedMs / 2000)
+                Math.floor(iElapsedMs / 1000)
                 );
 
             // 2. 아직 실행하지 않은 가격 변경을 처리
@@ -233,7 +233,7 @@ sap.ui.define([
                 if (oNews) {
 
                     // 1. 뉴스가 발생한 시점에서 시장 시간 정지
-                    this._pauseForNews(iNextTick * 2000);
+                    this._pauseForNews(iNextTick * 1000);
 
                     // 2. 뉴스 팝업 열기
                     this._openNews(oNews);
@@ -634,7 +634,7 @@ sap.ui.define([
 
             // 10. 변경된 가격을 차트 기록에 추가
             this._chartHistory[sStockId].push({
-            time: ((this._iLastPriceTick || 0) + 1) * 2 + "초",
+            time: ((this._iLastPriceTick || 0) + 1) * 1 + "초",
             price: iNextPrice
             });
         }
