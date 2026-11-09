@@ -209,3 +209,38 @@
     color: white !important;
     border-radius: 12px;
 }
+
+
+
+
+
+
+
+
+
+/* Market 화면 전용 */
+.peperoMarketPage .marketPixelHero {
+    min-height: 145px;
+    padding: 45px 12px 15px;
+    box-sizing: border-box;
+
+    background-image: url("../image/market_ui/header_awning_full.png");
+    background-position: center top;
+    background-repeat: repeat-x;
+    background-size: auto 42px;
+}
+
+.peperoMarketPage .marketPixelHeroRow {
+    gap: 12px;
+}
+
+.peperoMarketPage .marketPixelHero img {
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+@media (max-width: 650px) {
+    .peperoMarketPage .marketPixelHeroRow .sapMImg {
+        max-width: 28%;
+    }
+}
