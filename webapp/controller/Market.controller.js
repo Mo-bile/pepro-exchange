@@ -89,7 +89,8 @@ sap.ui.define([
             const oNewsModel = new JSONModel({
                 title: "",
                 body: "",
-                effectText: ""
+                effectText: "",
+                imageSrc: ""
             });
 
             // news라는 이름으로 등록
@@ -258,9 +259,20 @@ this._aNewsTicks = [1, 10, 20];
 
                         // 선택한 뉴스를 가져오고 배열에서 제거
                         oNews = this._aNewsPool.splice(iRandom, 1)[0];
-
                         // 다음 뉴스 순서로 이동
                         this._iNewsIndex++;
+
+                        // 랜덤 뉴스라면 종목 하나를 무작위 선택
+                        if (oNews.scope === "random") {
+                            const aStocks = oGameModel.getProperty("/stocks");
+
+                            const iRandomStock = Math.floor(
+                                Math.random() * aStocks.length
+                            );
+
+                            oNews.stockId = aStocks[iRandomStock].id;
+                            oNews.scope = "stock";
+                        }
 
                         // 일단 콘솔에서 뉴스 발생 확인
                         console.log("뉴스 발생!");
@@ -463,6 +475,15 @@ this._aNewsTicks = [1, 10, 20];
             oNewsModel.setProperty("/title", oNews.title);
             oNewsModel.setProperty("/body", oNews.body);
             oNewsModel.setProperty("/effectText", sEffectText);
+
+            // 뉴스 JSON에 지정된 PNG 이미지 경로
+            const sImagePath = sap.ui.require.toUrl(
+                "pepero/exchange/peperoexchange/image/pepero_news_witty/" +
+                oNews.image
+            );
+
+            // 뉴스 팝업 모델에 이미지 저장
+            oNewsModel.setProperty("/imageSrc", sImagePath);
 
             // 4. 확인 여부 초기화
             this._bNewsConfirmed = false;
@@ -685,6 +706,8 @@ this._aNewsTicks = [1, 10, 20];
 
             // 3. 가격 변동률 5가지
             const aRates = [-30, -20, 0, 20, 50];
+            // 테스트용 const aRates = [0, 0, 0, 0, 0];
+
 
             // 4. 종목 24개를 하나씩 반복
             for (let i = 0; i < aStocks.length; i++) {

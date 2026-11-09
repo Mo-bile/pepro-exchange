@@ -11,6 +11,23 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
             // 연결 필요: Market 진입 시 ready → running 전환과 시장 타이머 시작.
             // 현재 Market에는 타이머가 없으므로 여기서는 초기 상태 ready를 유지한다.
             oComponent.getRouter().navTo("RouteMarket");
+        },
+        // 챌린지 입장
+        onChallenge: function () {
+            var oComponent = this.getOwnerComponent();
+
+            oComponent.resetGame();
+            oComponent.getRouter().navTo("RouteChallenge");
+        },
+
+        // 게임 설명 열기
+        onRules: function () {
+            this.byId("homeRulesDialog").open();
+        },
+
+        // 게임 설명 닫기
+        onCloseRules: function () {
+            this.byId("homeRulesDialog").close();
         }
     });
 });
