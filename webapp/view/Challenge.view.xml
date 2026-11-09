@@ -160,10 +160,15 @@
         </VBox>
     </VBox>
 </Panel>
-                <!-- 시장으로 돌아가기 버튼  -->
-                    <Button id="returnButton" 
-                            text="시장으로 돌아가기" press=".onMarket" 
-                            type="Emphasized" class="peperoGameButton peperoStart sapUiMediumMarginBottom" />
+                <!-- 홈으로 돌아가기 버튼  -->
+           <HBox width="100%" justifyContent="End">
+                <Image
+                    src="/image/market_ui/button_home.png"
+                    width="155px"
+                    densityAware="false"
+                    tooltip="홈화면으로"
+                    press=".onHome"/>
+            </HBox>
                 
          </VBox>
              </HBox>  

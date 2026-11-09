@@ -201,7 +201,7 @@ sap.ui.define([
         // 11.06. 추가) 키보드 입력 처리 함수
         _onKeyDown: function (e) {
 
-            // 현재 URL 해시를 확인하여 챌린지 화면이 아니면 무시하고 종료
+            // 현재 URL 해시를 확인
             var sHash = window.location.hash;
             // window: 현재 켜져 있는 웹 브라우저 창 전체를 가리키는 최상위 객체
             // location: window내의 속성(Property), 접속 중인 웹페이지의 주소(URL)에 대한 모든 정보를 품고 있는 객체
