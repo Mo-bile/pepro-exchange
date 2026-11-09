@@ -564,3 +564,54 @@
         padding: 12px;
     }
 }
+
+/*
+* 작성자: 전지윤
+* 날짜: 1109
+* 기능: 결과 팝업 꾸미기
+*/
+/* 결과 팝업 전체 */
+.peperoResultDialog.sapMDialog {
+    border: 3px solid #6b4032;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 8px 8px 0 rgba(230, 150, 165, 0.35);
+}
+
+/* 결과 팝업 배경 */
+.peperoResultDialog .sapMDialogScrollCont {
+    background: #fffaf5;
+}
+
+/* 내용 */
+.resultContent {
+    padding: 2.5rem 3rem;
+    background: #fffaf5;
+}
+
+/* 제목 */
+.resultHeading {
+    color: #6b4032 !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.5rem;
+}
+
+/* 현금 / 총자산 박스 */
+.resultInfoBox {
+    width: 80%;
+    box-sizing: border-box;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+
+    background: #f7d4df;
+    border: 2px dashed #e99aae;
+    border-radius: 14px;
+}
+
+/* 숫자 강조 */
+.resultInfoBox .sapMTitle {
+    color: #6b4032 !important;
+    font-weight: 700 !important;
+}
+/*
+* 여기까지 결과 팝업 꾸미기*/
