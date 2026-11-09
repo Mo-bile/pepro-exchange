@@ -114,7 +114,7 @@
                             icon="sap-icon://refresh"
                             width="11rem"
                             class="peperoGameButton peperoRetry"
-                            visible="{= ${game>/challenge/status} === 'RESOLVED' }" 
+                            visible="{= ${game>/challenge/status} === 'RESOLVED' }"
                             press=".onRetry" />
 
                 <!-- 오른쪽 도트아트 -->
