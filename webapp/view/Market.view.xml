@@ -51,7 +51,7 @@
         <!-- 기존 시장 현황 -->
         <VBox id="MarketCard"
               width="100%"
-              class="peperoCard">
+              class="peperoCard marketMainCard">
                 <!-- 시장 현황: PNG 아이콘 + 실시간 데이터 -->
 <HBox
     width="100%"
@@ -131,8 +131,8 @@
 
     <!-- 왼쪽 : 선택한 종목의 차트 -->
     <VBox
-        width="40rem"
-        class="peperoCard">
+        width="100%"
+        class="peperoCard marketChartPanel">
 
         <layoutData>
             <l:GridData span="XL7 L7 M12 S12"/>
@@ -141,19 +141,26 @@
         <Title
             text="{chart>/stockName}"
             level="H3"
-            class="sapUiSmallMarginBottom"/>
+            class="marketPanelTitle sapUiSmallMarginBottom"/>
 
         <ObjectNumber
             number="{chart>/price}"
             unit="PPR"
-            class="sapUiSmallMarginBottom"/>
+            class="marketMainPrice sapUiSmallMarginBottom"/>
 
         <viz:VizFrame
             id="marketPriceChart"
             vizType="line"
-            width="35rem"
+            width="100%"
             height="330px"
-            vizProperties="{plotArea: {marker: {visible: false}}}">
+            vizProperties="{
+        title: {visible: false},
+        legend: {visible: false},
+        plotArea: {
+            colorPalette: ['#E879A0'],
+            marker: {visible: false}
+        }
+    }">
 
             <viz:dataset>
                 <viz.data:FlattenedDataset
@@ -193,14 +200,14 @@
             press=".onOpenTrade"
             type="Emphasized"
             width="100%"
-            class="sapUiSmallMarginTop"/>
+            class="marketTradeButton sapUiSmallMarginTop"/>
 
     </VBox>
 
     <!-- 오른쪽 : 전체 종목 목록 -->
     <VBox
-        width="30rem"
-        class="peperoCard">
+        width="100%"
+        class="peperoCard marketStocksPanel">
 
         <layoutData>
             <l:GridData span="XL5 L5 M12 S12"/>
@@ -209,7 +216,7 @@
         <Title
             text="전체 빼빼로"
             level="H3"
-            class="sapUiSmallMarginBottom"/>
+            class="marketPanelTitle  sapUiSmallMarginBottom"/>
 
         <ScrollContainer
             height="430px"
@@ -239,13 +246,42 @@
                 </columns>
 
                 <items>
-                    <ColumnListItem>
-                        <cells>
-                            <Text text="{game>name}"/>
-                            <Text text="{game>price}"/>
-                            <Text text="{game>quantity}"/>
-                        </cells>
-                    </ColumnListItem>
+                    
+<ColumnListItem>
+    <cells>
+
+        <!-- 종목 이미지 + 종목명 -->
+        <HBox
+            alignItems="Center"
+            class="marketStockCell">
+
+            <Image
+                src="{
+                    path: 'game>id',
+                    formatter: '.formatStockImage'
+                }"
+                width="1.6rem"
+                height="2.5rem"
+                densityAware="false"
+                decorative="true"
+                class="marketStockImage"/>
+
+            <Text
+                text="{game>name}"
+                wrapping="false"
+                class="marketStockName"/>
+
+        </HBox>
+
+        <!-- 현재가: 기존 바인딩 유지 -->
+        <Text text="{game>price}"/>
+
+        <!-- 보유 수량: 기존 바인딩 유지 -->
+        <Text text="{game>quantity}"/>
+
+    </cells>
+</ColumnListItem>
+
                 </items>
 
             </Table>

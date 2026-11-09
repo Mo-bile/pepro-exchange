@@ -21,7 +21,7 @@ xmlns:viz.data="sap.viz.ui5.data" -->
     xmlns="sap.m"
     xmlns:core="sap.ui.core">
 
-    <Dialog
+    <!-- <Dialog
         id="tradeDialog"
         title="♥ 빼빼로 매매 ♥"
         contentWidth="36rem"
@@ -32,14 +32,14 @@ xmlns:viz.data="sap.viz.ui5.data" -->
             alignItems="Stretch"
             width="80%">
 
-            <!-- 현재 보유 현금 -->
+            
             <Title text="♥ 주문 ♥" level="H3" class="tradeHeading" />
 
             <Text
                 text="현금: {game>/cash} PPR"
                 class="sapUiSmallMarginBottom" />
 
-            <!-- 종목 선택 -->
+            
             <Label text="♥ 종목 ♥" />
 
             <Select
@@ -56,14 +56,14 @@ xmlns:viz.data="sap.viz.ui5.data" -->
 
 
             <Panel class="brownPanel sapUiSmallMarginTop">
-                <!-- 선택한 종목 현재가 -->
+                
                 <Text
                     id="currentPriceText"
                     text="현재가: -"
                 />
             </Panel>
 
-            <!-- 수량 입력 -->
+            
             <Label
                 text="♥ 수량 ♥"
                 class="sapUiSmallMarginTop" />
@@ -75,7 +75,7 @@ xmlns:viz.data="sap.viz.ui5.data" -->
                 placeholder="매매 수량을 입력하세요"
                 liveChange=".onQuantityChange" />
 
-            <!-- 주문 예상 정보 -->
+            
             <Text
                 id="expectedAmountText"
                 text="예상 거래금액: 0 PPR"
@@ -85,7 +85,7 @@ xmlns:viz.data="sap.viz.ui5.data" -->
                 id="feeText"
                 text="수수료: 0 PPR" />
 
-            <!-- 매수 / 매도 -->
+            
             <HBox class="sapUiSmallMarginTop">
 
                 <Button
@@ -100,7 +100,7 @@ xmlns:viz.data="sap.viz.ui5.data" -->
 
             </HBox>
 
-            <!-- 보유현황 -->
+            
             <Panel class="pinkPanel sapUiSmallMarginTop">
                 <VBox alignItems="Center">
                     <Title
@@ -124,8 +124,113 @@ xmlns:viz.data="sap.viz.ui5.data" -->
                 press=".onCloseTrade" />
         </endButton>
 
+    </Dialog> -->
+    <Dialog
+        id="tradeDialog"
+        contentWidth="36rem"
+        class="peperoTradeDialog">
+
+        <customHeader>
+            <Toolbar class="peperoDialogHeader">
+                <ToolbarSpacer />
+                <Title
+                    text="♥ 빼빼로 매매 ♥"
+                    class="peperoDialogTitle" />
+                <ToolbarSpacer />
+            </Toolbar>
+        </customHeader>
+
+        <VBox
+            class="tradeContent"
+            alignItems="Stretch">
+
+            <Title
+                text="♥ 주문 ♥"
+                level="H3"
+                class="tradeHeading" />
+
+            <Text
+                text="현금 · {game>/cash} PPR"
+                class="tradeCash sapUiSmallMarginBottom" />
+
+            <Label
+                text="♥ 종목 ♥"
+                class="tradeLabel" />
+
+            <Select
+                id="stockSelect"
+                width="100%"
+                items="{game>/stocks}"
+                change=".onStockChange"
+                class="tradeSelect">
+
+                <core:Item
+                    key="{game>id}"
+                    text="{game>name}" />
+            </Select>
+
+            <Panel class="tradePriceBox sapUiSmallMarginTop">
+                <Text
+                    id="currentPriceText"
+                    text="현재가: -" />
+            </Panel>
+
+            <Label
+                text="♥ 수량 ♥"
+                class="tradeLabel sapUiSmallMarginTop" />
+
+            <Input
+                id="qtyInput"
+                type="Number"
+                width="100%"
+                placeholder="매매 수량을 입력하세요"
+                liveChange=".onQuantityChange" />
+
+            <Text
+                id="expectedAmountText"
+                text="예상 거래금액: 0 PPR"
+                class="sapUiSmallMarginTop" />
+
+            <Text
+                id="feeText"
+                text="수수료: 0 PPR" />
+
+            <HBox
+                class="sapUiSmallMarginTop"
+                justifyContent="Center">
+
+                <Button
+                    text="매수 ♥"
+                    class="pepBuyButton"
+                    press=".onBuy" />
+
+                <Button
+                    text="매도 ♥"
+                    class="pepSellButton sapUiTinyMarginBegin"
+                    press=".onSell" />
+            </HBox>
+
+            <Panel class="tradeHoldingBox sapUiMediumMarginTop">
+                <VBox alignItems="Center">
+                    <Title
+                        text="♥ 보유 현황 ♥"
+                        level="H4" />
+
+                    <Text
+                        id="holdingText"
+                        text="보유수량: 0주" />
+                </VBox>
+            </Panel>
+
+        </VBox>
+
+        <endButton>
+            <Button
+                text="닫기"
+                press=".onCloseTrade" />
+        </endButton>
+
     </Dialog>
 
-</core:FragmentDefinition>
 
-    
+</core:FragmentDefinition> 
