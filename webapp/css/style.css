@@ -569,6 +569,21 @@
     }
 }
 
+/* 차트 종목명 굵게 */
+.peperoMarketPage .marketPanelTitle {
+    font-weight: 800 !important;
+}
+
+/* 차트 가격 잘림 방지 */
+.peperoMarketPage .marketMainPrice {
+    min-height: 46px !important;
+    overflow: visible !important;
+}
+
+.peperoMarketPage .marketMainPrice .sapMObjectNumberText {
+    line-height: 1.4 !important;
+}
+
 /*
 * 작성자: 전지윤
 * 날짜: 1109

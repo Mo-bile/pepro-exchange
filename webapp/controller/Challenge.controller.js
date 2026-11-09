@@ -9,14 +9,14 @@ sap.ui.define([
         // 11. 09. 수정) 처음 화면 켜질 때 초기화 (game 모델 사용)
         onInit: function () {
 
-            // getOwnerComponent로 component와 연결하여 라우터(지도)를 가져옴
+            // getOwnerComponent로 component와 연결하여 라우터(Routing 지도)를 가져옴
             var oRouter = this.getOwnerComponent().getRouter();
             
             // "RouteChallenge"라는 화면에 진입할 때마다 this(현재 컨트롤러 내) _onRouteMatched 함수를 실행하도록 연결(두 번째 this는 이름표)
             oRouter.getRoute("RouteChallenge").attachPatternMatched(this._onRouteMatched, this);
 
             // 키보드(keydown) 이벤트 감지기 생성 및 등록. '.bind(this)'로 함수 내부의 this를 컨트롤러로 고정
-            this._fnKeyDownHandler = this._onKeyDown.bind(this);    
+            this._fnKeyDownHandler = this._onKeyDown.bind(this);
 
             // 브라우저 전체(window)에 키보드 누름 이벤트 감지기를 설치
             window.addEventListener("keydown", this._fnKeyDownHandler, true);
@@ -26,8 +26,8 @@ sap.ui.define([
         // "RouteChallenge" 화면에 진입할 때마다 매번 실행되는 초기화 함수 (라우터 이벤트에 의해 자동으로 실행되는 함수)
         _onRouteMatched: function (oEvent) {
 
-            // "game" 모델 불러오기(+ 안전장치)
-            var oModel = this.getOwnerComponent().getModel("game") || this.getView().getModel("game");
+            // "game" 모델 불러오기
+            var oModel = this.getOwnerComponent().getModel("game");
 
             if (oModel) {
 
@@ -48,24 +48,24 @@ sap.ui.define([
 
         },
 
-        // 조장님이 만든 시장 화면 이동 버튼
-        onMarket: function () {
+        // 조장님이 만든 홈 화면 이동 버튼
+        onHome: function () {
 
-            var oModel = this.getOwnerComponent().getModel("game") || this.getView().getModel("game");
+            var oModel = this.getOwnerComponent().getModel("game");
 
-            // sStatus에 oModel을 잘 가져왔는지 ? 참일 경우 oModel의 status를 불러옴 : 거짓일 경우 아무 것도 불러오지 않음
-            var sStatus = oModel ? oModel.getProperty("/challenge/status") : ""
+            // sStatus에 oModel의 status를 불러옴
+            var sStatus = oModel.getProperty("/challenge/status");
 
             // 챌린지 중 시장으로의 이동을 막는 if문
             if(sStatus === "ACTIVE") {
                 // status가 ACTIVE여서 조건을 만족하는 경우, MessageToast를 띄우고,
-                MessageToast.show(`챌린지 진행 중에는 시장으로 이동하실 수 없습니다!`);
+                MessageToast.show(`챌린지 진행 중에는 홈으로 이동하실 수 없습니다!`);
                 // return문이 실행되어 함수 밖으로 빠져나감(함수 종료)
                 return;
             }
 
-            // manifest에 있는 RouteMarket을 찾아서 그 곳으로 이동하는 것
-            this.getOwnerComponent().getRouter().navTo("RouteMarket");
+            // manifest에 있는 RouteHome을 찾아서 그 곳으로 이동하는 것
+            this.getOwnerComponent().getRouter().navTo("RouteHome");
 
         },
 
@@ -169,6 +169,35 @@ sap.ui.define([
             oModel.setProperty("/challenge/displayTime", stoppedSec);   // 멈춘 시점의 최종 시간을 화면 숫자로 고정
             oModel.setProperty("/challenge/result", resultStatus);      // 성공 / 실패 / 타임아웃 판정 결과 저장
 
+            // 시간 초과(TIMEOUT)가 아닐 때만 기록에 추가
+            if (resultStatus !== "TIMEOUT") {
+                // 기존 기록 배열 가져오기 (topRecords가 없으니 undefined이므로, 첫 순환은 빈 배열로 시작)
+                var aRecords = oModel.getProperty("/challenge/topRecords") || [];
+                // setProperty는 마지막 줄에서 실행하여 두 번째부터 getProperty 가능
+                
+                // stop 버튼 누를 때마다 기록이 추가되는 변수 aRecords
+                aRecords.push({
+                    // xml을 통해 화면에 보여줄 시간
+                    time: stoppedSec,
+                    // 단순 오차 계산을 위함(화면에 나타내진 않음)
+                    errorMs: errorMs
+                    // 멈춘 시간과 오차 수치를 담아서 aRecords에 push함 (Math.abs 때문에 음수는 없고 양수만 출력됨)
+                });
+
+                // 11.11초와의 오차가 작은 순(1위 -> 3위)으로 정렬
+                aRecords.sort(function (a, b) {
+                    // a의 오차밀리초 - b의 오차밀리초 = 양수(+)일 경우 b가 우선순위
+                    // a의 오차밀리초 - b의 오차밀리초 = 음수(-)일 경우 a가 우선순위
+                    return a.errorMs - b.errorMs;
+                });
+                // return문으로 a.errorMs - b.errorMs의 값을 제공하고 function을 빠져나감
+
+                // 0, 1, 2까지(3번부터 slice)
+                aRecords = aRecords.slice(0, 3);
+                // topRecords의 프로퍼티값을 aRecords로 설정
+                oModel.setProperty("/challenge/topRecords", aRecords);
+            }
+
         },
 
         // onRetry 함수는 사용자가 게임이 끝난 뒤 RETRY 버튼을 눌렀을 때, 모든 상태를 처음으로 되돌리는 '초기화(리셋)' 코드
@@ -196,7 +225,7 @@ sap.ui.define([
                 return;
             }
 
-            // 만약 물리적으로 눌린 키가 스페이스 바 or 키 코드가 32번(스페이스바)이라면ㅡ
+            // 만약 물리적으로 눌린 키가 스페이스 바 or 키 코드가 32번(스페이스바)이라면
             if (e.code === "Space" || e.keyCode === 32) {
 
                 // 여기서 이벤트를 가로채서 다른 버튼들로 이벤트가 번지는 것을 방지
@@ -225,7 +254,7 @@ sap.ui.define([
         // 화면을 벗어날 때 인터벌 종료(타이머 자동 종료)
         onExit: function () {
 
-            // 타이머 인터벌 기능 종료
+            // clearInterval: 타이머 인터벌 기능 종료
             if(this._timerId) {
                 clearInterval(this._timerId);
             }
