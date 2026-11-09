@@ -1,0 +1,96 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <!-- <Dialog
+        id="resultDialog"
+        title="♥ 게임 결과 ♥"
+        class="peperoResultDialog">
+
+        <VBox class="sapUiMediumMargin" alignItems="Center">
+
+            <Title
+                text="♥ 거래 종료 ♥"
+                level="H2" />
+
+            <Text
+                text="3분간의 거래가 종료되었습니다."
+                class="sapUiSmallMarginBottom" />
+
+            <Label text="보유 현금" />
+
+            <Title
+                text="{game>/cash} PPR"
+                level="H3" />
+
+            <Label
+                text="총 자산"
+                class="sapUiMediumMarginTop" />
+
+            <Title
+                text="{game>/totalAssets} PPR"
+                level="H2" />
+
+        </VBox>
+
+        <endButton>
+            <Button
+                text="확인"
+                press=".onCloseResultDialog" />
+        </endButton>
+
+    </Dialog> -->
+    <Dialog
+        id="resultDialog"
+        contentWidth="36rem"
+        class="peperoResultDialog">
+
+        <customHeader>
+            <Toolbar class="peperoDialogHeader">
+                <ToolbarSpacer />
+                <Title
+                    text="♥ 게임 결과 ♥"
+                    class="peperoDialogTitle" />
+                <ToolbarSpacer />
+            </Toolbar>
+        </customHeader>
+
+        <VBox
+            class="resultContent"
+            alignItems="Center">
+
+            <Title
+                text="♥ 거래 종료 ♥"
+                level="H3"
+                class="resultHeading" />
+
+            <Text
+                text="3분간의 거래가 종료되었습니다."
+                class="sapUiSmallMarginBottom" />
+
+            <VBox class="resultInfoBox" alignItems="Center">
+                <Label text="보유 현금" />
+                <Title
+                    text="{game>/cash} PPR"
+                    level="H3" />
+
+                <Label
+                    text="총 자산"
+                    class="sapUiMediumMarginTop" />
+
+                <Title
+                    text="{game>/totalAssets} PPR"
+                    level="H3" />
+            </VBox>
+
+        </VBox>
+
+        <endButton>
+            <Button
+                text="확인"
+                press=".onCloseResultDialog" />
+        </endButton>
+
+    </Dialog>
+
+</core:FragmentDefinition>

@@ -482,8 +482,8 @@
     box-shadow: none;
 }
 /* ==========================================
-   //4. 선택 종목 현재가
-
+   4. 선택 종목 현재가
+========================================== */
 .peperoMarketPage .marketMainPrice {
     display: block;
     padding: 6px 8px;
@@ -529,15 +529,19 @@
    6. 매매 버튼
 ========================================== */
 
-.peperoMarketPage .marketTradeButton {
-    margin-top: 14px;
+/* 매매하기 PNG 버튼 - 초기 버전 */
+.peperoMarketPage .marketTradeButton.sapMBtn {
+    width: 100%;
+    height: 55px;
+    padding: 0;
 }
 
-/* 버튼 색상은 Horizon 기본 테마 사용 */
 .peperoMarketPage .marketTradeButton .sapMBtnInner {
-    min-height: 2.75rem;
-    border-radius: 8px;
-    font-weight: 700;
+    width: 100%;
+    height: 100%;
+    background: url("../image/market_ui/button_trade_labeled.png")
+            center / contain no-repeat !important;
+    border: none !important;
 }
 
 /* ==========================================
@@ -564,3 +568,54 @@
         padding: 12px;
     }
 }
+
+/*
+* 작성자: 전지윤
+* 날짜: 1109
+* 기능: 결과 팝업 꾸미기
+*/
+/* 결과 팝업 전체 */
+.peperoResultDialog.sapMDialog {
+    border: 3px solid #6b4032;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 8px 8px 0 rgba(230, 150, 165, 0.35);
+}
+
+/* 결과 팝업 배경 */
+.peperoResultDialog .sapMDialogScrollCont {
+    background: #fffaf5;
+}
+
+/* 내용 */
+.resultContent {
+    padding: 2.5rem 3rem;
+    background: #fffaf5;
+}
+
+/* 제목 */
+.resultHeading {
+    color: #6b4032 !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.5rem;
+}
+
+/* 현금 / 총자산 박스 */
+.resultInfoBox {
+    width: 80%;
+    box-sizing: border-box;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+
+    background: #f7d4df;
+    border: 2px dashed #e99aae;
+    border-radius: 14px;
+}
+
+/* 숫자 강조 */
+.resultInfoBox .sapMTitle {
+    color: #6b4032 !important;
+    font-weight: 700 !important;
+}
+/*
+* 여기까지 결과 팝업 꾸미기*/

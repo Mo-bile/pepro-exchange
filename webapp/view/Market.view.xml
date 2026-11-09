@@ -195,13 +195,13 @@
 
         </viz:VizFrame>
 
+    <!-- 처음 적용했던 PNG 매매하기 버튼 -->
         <Button
-            text="매매하기"
+            id="marketTradeBtn"
             press=".onOpenTrade"
-            type="Emphasized"
+            type="Default"
             width="100%"
             class="marketTradeButton sapUiSmallMarginTop"/>
-
     </VBox>
 
     <!-- 오른쪽 : 전체 종목 목록 -->
@@ -274,7 +274,12 @@
         </HBox>
 
         <!-- 현재가: 기존 바인딩 유지 -->
-        <Text text="{game>price}"/>
+        <VBox>  
+            <Text text="{game>price}"/>
+            <Text
+                text="{= ${game>changeRate} + '%' }"
+                class="sapUiTinyMarginBegin"/>
+        </VBox>
 
         <!-- 보유 수량: 기존 바인딩 유지 -->
         <Text text="{game>quantity}"/>
@@ -301,7 +306,6 @@
                     <Button id="homeButton1" text="시작 화면으로" press=".onHome" type="Transparent" class="peperoGameButton peperoStart sapUiMediumMarginBottom sapUiSmallMarginBegin" />
                     </HBox>
                     <Button id="resultButton" text="결과 화면 확인 (개발용)" press=".onResult" type="Default" class="sapUiSmallMarginBottom" />
-                    <!--Button text="매매하기" press=".onOpenTrade" -->
                 </VBox>
             </VBox>
         </content>
