@@ -5,7 +5,7 @@
       "title": "커플 500쌍 기습 이별!",
       "body": "빼빼로데이를 하루 앞두고 전국 커플 500쌍이 동시 이별을 선언했습니다.",
       "scope": "all",
-      "rate": -5,
+      "rate": -50,
       "image": "breakup.png"
     },
     {
@@ -13,7 +13,7 @@
       "title": "솔로들의 대반란!",
       "body": "전국 솔로 연합이 '우리가 사 먹으면 그만이야!'라며 단체 구매를 시작했습니다.",
       "scope": "all",
-      "rate": 5,
+      "rate": 50,
       "image": "solo.png"
     },
     {
@@ -21,7 +21,7 @@
       "title": "전국 고백 성공률 99%!",
       "body": "오늘 고백한 사람 대부분이 성공했다는 믿기 힘든 소식입니다.",
       "scope": "all",
-      "rate": 5,
+      "rate": 50,
       "image": "confession_success.png"
     },
     {
@@ -29,7 +29,7 @@
       "title": "전국적인 고백 대참사!",
       "body": "단체 고백 이벤트에서 500명이 동시에 '좋은 친구로 지내자'는 답변을 받았습니다.",
       "scope": "all",
-      "rate": -5,
+      "rate": -50,
       "image": "confession_fail.png"
     },
     {
@@ -37,7 +37,7 @@
       "title": "전국 학교 빼빼로 압수령!",
       "body": "교장 선생님들의 긴급회의 끝에 빼빼로 반입이 금지되었습니다.",
       "scope": "all",
-      "rate": -5,
+      "rate": -50,
       "image": "school_ban.png"
     },
     {
@@ -45,7 +45,7 @@
       "title": "편의점 빼빼로 품절!",
       "body": "전국 편의점에서 빼빼로 대란이 발생했습니다.",
       "scope": "all",
-      "rate": 5,
+      "rate": 50,
       "image": "sold_out.png"
     },
     {
@@ -53,7 +53,7 @@
       "title": "빼빼로 가격 담합 의혹!",
       "body": "'이 작은 과자가 왜 이렇게 비싸?'라며 소비자들이 구매 거부를 선언했습니다.",
       "scope": "all",
-      "rate": -5,
+      "rate": -50,
       "image": "price_collusion.png"
     },
     {
@@ -61,7 +61,7 @@
       "title": "11월 11일의 기적!",
       "body": "11시 11분에 소원을 빌면 연애가 이루어진다는 소문이 확산되고 있습니다.",
       "scope": "all",
-      "rate": 5,
+      "rate": 50,
       "image": "nov11_miracle.png"
     },
     {
@@ -70,7 +70,7 @@
       "body": "전국 아몬드 농장에서 아몬드가 집단 탈출했습니다.",
       "scope": "stock",
       "stockId": "almond",
-      "rate": -5,
+      "rate": -50,
       "image": "almond_news.png"
     },
     {
@@ -79,7 +79,7 @@
       "body": "'근본은 역시 오리지널!' SNS에서 오리지널 빼빼로 인증이 유행하고 있습니다.",
       "scope": "stock",
       "stockId": "original",
-      "rate": 5,
+      "rate": 50,
       "image": "original_news.png"
     },
     {
@@ -88,7 +88,7 @@
       "body": "'누드 빼빼로에게도 옷을!' 캠페인이 전국적으로 확산되었습니다.",
       "scope": "stock",
       "stockId": "nude",
-      "rate": 5,
+      "rate": 50,
       "image": "nude_outfit.png"
     },
     {
@@ -96,7 +96,7 @@
       "title": "개미들의 반격!",
       "body": "개인 투자자 1만 명이 특정 빼빼로를 단체 매수했습니다.",
       "scope": "random",
-      "rate": 5,
+      "rate": 50,
       "image": "ants_buy.png"
     },
     {
@@ -105,7 +105,7 @@
       "body": "인기 아이돌이 '제 최애는 아몬드예요'라고 발언했습니다.",
       "scope": "stock",
       "stockId": "almond",
-      "rate": 5,
+      "rate": 50,
       "image": "idol_almond.png"
     },
     {
@@ -113,7 +113,7 @@
       "title": "고양이의 예언!",
       "body": "주식 천재 고양이가 앞발로 특정 빼빼로를 선택했습니다.",
       "scope": "random",
-      "rate": 5,
+      "rate": 50,
       "image": "cat_predict.png"
     }
   ]

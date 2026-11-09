@@ -182,13 +182,12 @@ sap.ui.define([
             this._initializeChart();
 
             
-            // this._aNewsTicks = [
-            //     6 + Math.floor(Math.random() * 21),// 30~50초
-            //     15 + Math.floor(Math.random() * 29),// 76~104초
-            //     26 + Math.floor(Math.random() * 31)// 130~160초
-            // ];
-            // 테스트용 뉴스 발생 시간
-this._aNewsTicks = [1, 10, 20];
+             this._aNewsTicks = [
+                 6 + Math.floor(Math.random() * 21),// 30~50초
+                 15 + Math.floor(Math.random() * 29),// 76~104초
+                 26 + Math.floor(Math.random() * 31)// 130~160초
+             ];
+
 
             // 첫 번째 뉴스부터 시작
             this._iNewsIndex = 0;
@@ -705,8 +704,7 @@ this._aNewsTicks = [1, 10, 20];
             const aStocks = oGameModel.getProperty("/stocks");
 
             // 3. 가격 변동률 5가지
-            const aRates = [-30, -20, 0, 20, 50];
-            // 테스트용 const aRates = [0, 0, 0, 0, 0];
+            const aRates = [-20, -10, 0, 10, 20, 30];
 
 
             // 4. 종목 24개를 하나씩 반복
