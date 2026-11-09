@@ -52,11 +52,19 @@
         <dependents>
     <Dialog
         id="homeRulesDialog"
-        title="게임 설명"
         contentWidth="680px"
         contentHeight="70vh"
         stretchOnPhone="true"
-        verticalScrolling="true">
+        verticalScrolling="true"
+        class="peperoRulesDialog">
+
+        <customHeader>
+            <Toolbar class="peperoRulesHeader">
+                <ToolbarSpacer/>
+                <Title text="♥ 게임 설명 ♥" class="peperoRulesTitle"/>
+                <ToolbarSpacer/>
+            </Toolbar>
+        </customHeader>
 
         <content>
             <VBox width="100%">
