@@ -9,15 +9,21 @@
             </Bar>
         </customHeader>
         <content>
-            <VBox id="homeContent" class="sapUiMediumMarginTop">
-                <!-- 로고 삽입 예정 영역 -->
-                <HBox id="homeLogoPlaceholder" height="8rem" width="8rem" class="peperoCard sapUiSmallMarginBottom" />
-                <VBox id="homeIntro" class="sapUiMediumMarginBottom">
+            <VBox id="homeContent" class="sapUiMediumMarginTop" alignItems="Center" justifyContent="Center">
+                <!--로고 -->
+                <Image src="/image/pepero_individual_pngs/home.png" width="450px" height="250px"/>
+                
+                <VBox id="homeIntro" class="sapUiMediumMarginBottom" alignItems="Center">
                     <Title id="homeWelcomeTitle" text="달콤한 빼빼로 랜드에 오신 걸 환영해요!" level="H2" wrapping="true" class="peperoBrandTitle sapUiSmallMarginBottom" />
                     <Text id="homeNotice" text="오르락내리락, 가격 롤러코스터를 즐겨보세요." class="sapUiTinyMarginBottom" />
                     <Text id="homeIntroDescription" text="빼빼로 종목을 사고팔며 나만의 자산을 불려보세요!" />
                 </VBox>
-                <Panel id="homeRulesPanel" headerText="입장 전, 즐기는 방법!" class="sapUiSmallMarginBottom">
+
+                <!-- 첫번째 박스 -->
+                <Panel id="homeRulesPanel" class="peperoTimerBox sapUiMediumMarginTop" width="600px" height="400px" >
+                    <HBox width="100%" justifyContent="Center">
+                    <Image src="/image/pepero_individual_pngs/home1.png" width="250px" height="100px"/>
+                    </HBox>
                     <content>
                         <VBox id="homeRulesContent">
                             <VBox id="homeCashRule" class="sapUiSmallMarginBottom">
@@ -35,8 +41,15 @@
                         </VBox>
                     </content>
                 </Panel>
-                <Panel id="homeChallengePanel" headerText="잠깐 들러요! 11.11초 챌린지 (선택)" class="sapUiSmallMarginBottom">
+
+                <!-- 두번째 박스 -->
+                <Panel id="homeChallengePanel" class="peperoTimerBox sapUiMediumMarginTop" width="600px" height="350px">
                     <content>
+
+                    <HBox width="100%" justifyContent="Center">
+                    <Image src="/image/pepero_individual_pngs/home2.png" width="250px" height="100px"/>
+                    </HBox>
+
                         <VBox id="homeChallengeContent">
                             <Text id="homeChallengeNotice" text="랜드 속 작은 놀이터에도 들러볼까요?" class="peperoBrandTitle sapUiSmallMarginBottom" />
                             <Text id="homeChallengeDescription" text="시장에서 원할 때 참여해, 11.11초에 딱 맞춰 멈춰보세요!" class="sapUiSmallMarginBottom" />
@@ -44,7 +57,7 @@
                         </VBox>
                     </content>
                 </Panel>
-                <Button id="startButton" text="게임 시작! 빼빼로 랜드로 출발" press=".onStart" type="Emphasized" class="sapUiSmallMarginBottom" />
+                <Button id="startButton" text="게임 시작! 빼빼로 랜드로 출발" press=".onStart" type="Emphasized" class="peperoGameButton peperoStart sapUiMediumMarginBottom" />
             </VBox>
         </content>
     </Page>
