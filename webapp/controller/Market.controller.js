@@ -32,6 +32,9 @@ sap.ui.define([
 
             this._oMarketRoute.attachPatternMatched(this._onEnterMarket, this);
             
+            // 다른 화면으로 이동하는지 감지
+            this._oRouter = this.getOwnerComponent().getRouter();
+            this._oRouter.attachRouteMatched(this._onRouteChanged, this);
                 // ========== 뉴스 데이터 JSONModel ==========
 
                 // 뉴스 JSON을 저장할 모델 생성
@@ -102,10 +105,27 @@ sap.ui.define([
             this._oNewsDialog = null;
             this._bNewsConfirmed = false;
         },
-        
+        _onRouteChanged: function (oEvent) {
+            const sRouteName = oEvent.getParameter("name");
+
+            if (sRouteName === "RouteMarket") {
+                this._bIsMarketActive = true;
+                return;
+            }
+
+            this._bIsMarketActive = false;
+            this._bStartAfterLoad = false;
+            this._clearMarketTimer();
+            this._bNewsConfirmed = false;
+
+            if (this._oNewsDialog && this._oNewsDialog.isOpen()) {
+                this._oNewsDialog.close();
+            }
+        },
         // Market 화면 진입 시 실행
         _onEnterMarket: function () {
 
+            this._bIsMarketActive = true;
             const oGameModel = this.getOwnerComponent().getModel("game");
 
             // 챌린지에서 시장으로 돌아왔다면 타이머 재개
@@ -143,11 +163,13 @@ sap.ui.define([
             this._initializeChart();
 
             
-            this._aNewsTicks = [
-                6 + Math.floor(Math.random() * 21),// 30~50초
-                15 + Math.floor(Math.random() * 29),// 76~104초
-                26 + Math.floor(Math.random() * 31)// 130~160초
-            ];
+            // this._aNewsTicks = [
+            //     6 + Math.floor(Math.random() * 21),// 30~50초
+            //     15 + Math.floor(Math.random() * 29),// 76~104초
+            //     26 + Math.floor(Math.random() * 31)// 130~160초
+            // ];
+            // 테스트용 뉴스 발생 시간
+this._aNewsTicks = [1, 10, 20];
 
             // 첫 번째 뉴스부터 시작
             this._iNewsIndex = 0;
@@ -425,16 +447,16 @@ sap.ui.define([
                     });
                 }
 
-                // 6. 현재 뉴스 정지 상태인지 확인
-                const oGameModel = this.getOwnerComponent().getModel("game");
+                // 6. 시장 화면에서만 뉴스 팝업 표시
+            const oGameModel = this.getOwnerComponent().getModel("game");
 
-                if (
-                    oGameModel.getProperty("/status") === "paused" &&
-                    oGameModel.getProperty("/pauseReason") === "news"
-                ) {
-                    // 7. 뉴스 팝업 열기
-                    this._oNewsDialog.open();
-                }
+            if (
+                this._bIsMarketActive &&
+                oGameModel.getProperty("/status") === "paused" &&
+                oGameModel.getProperty("/pauseReason") === "news"
+            ) {
+                this._oNewsDialog.open();
+            }
 
             } catch (oError) {
 
@@ -487,6 +509,13 @@ sap.ui.define([
                     this
                 );
             }
+
+            if (this._oRouter) {
+            this._oRouter.detachRouteMatched(
+                this._onRouteChanged,
+                this
+            );
+        }
         },
 
 
@@ -726,7 +755,23 @@ sap.ui.define([
             this.getOwnerComponent().getRouter().navTo("RouteResult");
         },
         onHome: function () {
+
+            // 1. 뉴스 로딩 후 시장이 시작되지 않도록 방지
+            this._bStartAfterLoad = false;
+
+            // 2. 시장 타이머 종료
+            this._clearMarketTimer();
+
+            // 3. 뉴스 팝업이 열려 있으면 닫기
+            this._bNewsConfirmed = false;
+
+            if (this._oNewsDialog && this._oNewsDialog.isOpen()) {
+                this._oNewsDialog.close();
+            }
+
+            // 4. 시작 화면으로 이동
             this.getOwnerComponent().getRouter().navTo("RouteHome");
+
         },
         onOpenTrade: async function () {
             if (!this._oTradeDialog) {
