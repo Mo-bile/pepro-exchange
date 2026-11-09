@@ -213,10 +213,27 @@
             <l:GridData span="XL5 L5 M12 S12"/>
         </layoutData>
 
-        <Title
-            text="전체 빼빼로"
-            level="H3"
-            class="marketPanelTitle  sapUiSmallMarginBottom"/>
+        <!-- 전체 빼빼로 제목 + 가격 정렬 버튼 -->
+        <HBox
+            width="100%"
+            alignItems="Center"
+            justifyContent="SpaceBetween"
+            class="sapUiSmallMarginBottom">
+
+            <Title
+                text="전체 빼빼로"
+                level="H3"
+                class="marketPanelTitle"/>
+
+            <ToggleButton
+                id="priceSortButton"
+                text="높은 가격순"
+                icon="sap-icon://sort-descending"
+                type="Attention"
+                pressed="false"
+                press=".onTogglePriceSort"/>
+
+        </HBox>
 
         <ScrollContainer
             height="430px"
@@ -228,8 +245,7 @@
                 id="marketStocksTable"
                 items="{game>/stocks}"
                 width="100%"
-                mode="SingleSelectMaster"
-                selectionChange=".onSelectStock">
+                mode="None">
 
                 <columns>
                     <Column>
@@ -247,7 +263,9 @@
 
                 <items>
                     
-<ColumnListItem>
+<ColumnListItem
+    type="Active"
+    press=".onSelectStock">
     <cells>
 
         <!-- 종목 이미지 + 종목명 -->

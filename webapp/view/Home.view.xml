@@ -102,7 +102,7 @@
 
                         <VBox id="homeChallengeContent">
                             <Text id="homeChallengeNotice" text="랜드 속 작은 놀이터에도 들러볼까요?" class="peperoBrandTitle sapUiSmallMarginBottom" />
-                            <Text id="homeChallengeDescription" text="시장에서 원할 때 참여해, 11.11초에 딱 맞춰 멈춰보세요!" class="sapUiSmallMarginBottom" />
+                            <Text id="homeChallengeDescription" text="11.11초에 딱 맞춰 멈춰보세요!" class="sapUiSmallMarginBottom" />
                             <Text id="homeChallengeOptional" text="참여는 자유! 빼빼로 매매만 즐겨도 좋아요." />
                         </VBox>
                     </content>

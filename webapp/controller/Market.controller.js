@@ -2,9 +2,10 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "pepero/exchange/peperoexchange/logic/Trade",
     "sap/m/MessageToast",
-    "sap/ui/model/json/JSONModel"
+    "sap/ui/model/json/JSONModel",
+    "sap/ui/model/Sorter"
             
-], function (Controller, Trade, MessageToast, JSONModel) {
+], function (Controller, Trade, MessageToast, JSONModel,Sorter) {
     "use strict";
 
     // B / JHJ: 화면 이동만 담당. 게임 로직은 구현 예정.
@@ -14,6 +15,13 @@ sap.ui.define([
             const oGameModel = this.getOwnerComponent().getModel("game");
             //2. game 모델의 stocks 배열을 가져오기
             const aStocks = oGameModel.getProperty("/stocks");
+
+            // 게임 시작 시 종목의 원래 순서 저장
+            this._mOriginalStockOrder = {};
+
+            aStocks.forEach((oStock, i) => {
+                this._mOriginalStockOrder[oStock.id] = i;
+            });
             
             // 차트 데이터 초기화
             this._initializeChart();
@@ -663,33 +671,32 @@ sap.ui.define([
         },
 
 
-        // ========== 종목 클릭 시 차트 변경 ==========
+        // 종목 클릭 시 차트 변경 + 매매창 열기
         onSelectStock: function (oEvent) {
 
             // 1. 클릭한 종목 가져오기
-            const oItem = oEvent.getParameter("listItem");
+            const oItem = oEvent.getSource();
 
-            if (!oItem) {
-                return;
-            }
-
+            // 2. 클릭한 종목의 데이터 가져오기
             const oStock = oItem.getBindingContext("game").getObject();
 
-            // 2. 선택한 종목 ID 저장
+            // 3. 선택한 종목 ID 저장
             this._selectedStockId = oStock.id;
 
-            // 3. 차트 모델 가져오기
+            // 4. 차트 모델 가져오기
             const oChartModel = this.getView().getModel("chart");
 
-            // 4. 선택 종목의 정보로 변경
+            // 5. 선택 종목의 정보로 차트 변경
             oChartModel.setProperty("/stockName", oStock.name);
             oChartModel.setProperty("/price", oStock.price);
 
-            // 5. 선택 종목의 가격 기록 표시
             oChartModel.setProperty(
                 "/history",
                 this._chartHistory[oStock.id].slice()
             );
+
+            // 6. 선택한 종목으로 매매창 열기
+            this.onOpenTrade();
         },
 
 
@@ -704,8 +711,7 @@ sap.ui.define([
             const aStocks = oGameModel.getProperty("/stocks");
 
             // 3. 가격 변동률 5가지
-            const aRates = [-20, -10, 0, 10, 20, 30];
-
+            const aRates = [-12, -8, -4, 4, 8, 12];
 
             // 4. 종목 24개를 하나씩 반복
             for (let i = 0; i < aStocks.length; i++) {
@@ -798,6 +804,22 @@ sap.ui.define([
 
             // 10. 모델에 총자산 반영
             oGameModel.setProperty("/totalAssets", totalAssets);
+
+            // 매매창이 열려 있다면 현재가와 예상 거래금액 실시간 갱신
+            if (this._oTradeDialog && this._oTradeDialog.isOpen()) {
+                this.onStockChange();
+            }
+
+            // 높은 가격순 정렬이 켜져 있으면 가격 변동 후 순위 갱신
+            const oSortButton = this.byId("priceSortButton");
+
+            if (oSortButton && oSortButton.getPressed()) {
+
+                const oBinding = this.byId("marketStocksTable")
+                    .getBinding("items");
+
+                oBinding.sort(new Sorter("price", true));
+            }
         },
 
 
@@ -857,6 +879,25 @@ sap.ui.define([
                     name: "pepero.exchange.peperoexchange.fragment.Trade" //Trade.fragment.xml의 거래창을 불러와
                 });
             }
+            // 2. 매매창의 종목 선택창 가져오기
+            const oSelect = this.byId("stockSelect");
+            // 3. 현재 선택한 종목 ID와 일치하는 항목 찾기
+            const oSelectedItem = oSelect.getItems().find((oItem) => {
+
+            const oContext = oItem.getBindingContext("game");
+
+            return oContext &&
+            oContext.getProperty("id") === this._selectedStockId;
+        });
+
+            // 4. 선택한 종목으로 매매창 설정
+            if (oSelectedItem) {
+                oSelect.setSelectedItem(oSelectedItem);
+            }
+
+            // 5. 매매창을 열 때마다 기본 수량 1로 초기화
+            this.byId("qtyInput").setValue(1);
+
 
             this._oTradeDialog.open();//저장된 거래창을 화면에 띄웁니다. open()은 UI5가 제공하는 기능임
             this.onStockChange();//같은 컨트롤러에 있는 onStockChange() 함수를 실행. 거래창에 선택된 종목의 가격과 보유 수량을 표시하기 위해서
@@ -1015,6 +1056,107 @@ sap.ui.define([
             );
 
             this.onStockChange();
+        },
+
+        // 최대 구매 가능한 수량 자동 계산
+        onMaxBuy: function () {
+
+            // 1. 공통 game 모델 가져오기
+            const oGameModel = this.getOwnerComponent().getModel("game");
+
+            // 2. 현재 보유 현금
+            const iCash = oGameModel.getProperty("/cash");
+
+            // 3. 매매창에서 선택한 종목 가져오기
+            const oSelect = this.byId("stockSelect");
+            const oItem = oSelect.getSelectedItem();
+
+            if (!oItem) {
+                MessageToast.show("종목을 선택해주세요.");
+                return;
+            }
+
+            // 4. 선택 종목의 현재가
+            const oStock = oItem.getBindingContext("game").getObject();
+            const iPrice = oStock.price;
+
+            if (!iPrice || iPrice <= 0) {
+                MessageToast.show("현재가를 확인할 수 없습니다.");
+                return;
+            }
+
+            // 5. 수수료 0.3% 포함 최대 구매 수량
+            const iFeeRate = 0.003;
+
+            const iMaxQty = Math.min(
+                999999,
+                Math.floor(iCash / (iPrice * (1 + iFeeRate)))
+            );
+
+            // 6. 구매 불가능한 경우
+            if (iMaxQty < 1) {
+                MessageToast.show("보유 현금이 부족합니다.");
+                return;
+            }
+
+            // 7. 최대 구매 수량 입력
+            this.byId("qtyInput").setValue(iMaxQty);
+
+            // 8. 예상 거래금액, 수수료 갱신
+            this.onQuantityChange();
+        },
+        // 현재 선택한 종목의 보유 수량 전체 입력
+        onMaxSell: function () {
+
+            // 1. 매매창에서 선택한 종목 가져오기
+            const oSelect = this.byId("stockSelect");
+            const oItem = oSelect.getSelectedItem();
+
+            if (!oItem) {
+                MessageToast.show("종목을 선택해주세요.");
+                return;
+            }
+
+            // 2. 선택한 종목의 데이터 가져오기
+            const oStock = oItem.getBindingContext("game").getObject();
+
+            // 3. 현재 보유 수량
+            const iQuantity = Number(oStock.quantity) || 0;
+
+            // 4. 보유 수량이 없다면
+            if (iQuantity <= 0) {
+                MessageToast.show("매도할 보유 수량이 없습니다.");
+                return;
+            }
+
+            // 5. 전체 보유 수량 입력
+            this.byId("qtyInput").setValue(iQuantity);
+
+            // 6. 예상 거래금액과 수수료 갱신
+            this.onQuantityChange();
+        },
+
+        // 전체 종목 높은 가격순 정렬 ON / OFF
+        onTogglePriceSort: function (oEvent) {
+
+            // 1. 토글 버튼 상태 확인
+            const bPressed = oEvent.getSource().getPressed();
+
+            // 2. 종목 테이블 바인딩 가져오기
+            const oBinding = this.byId("marketStocksTable")
+                .getBinding("items");
+
+            if (bPressed) {
+
+                // ON: 현재가 높은 순서로 정렬
+                oBinding.sort(new Sorter("price", true));
+
+            } else {
+
+                // OFF: 정렬 해제 후 원래 배열 순서로 복귀
+                oBinding.sort(null);
+
+            }
         }
         
     });
