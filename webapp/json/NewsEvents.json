@@ -71,7 +71,7 @@
       "scope": "stock",
       "stockId": "almond",
       "rate": -5,
-      "image": "almond.png"
+      "image": "almond_news.png"
     },
     {
       "id": "original",
@@ -80,7 +80,7 @@
       "scope": "stock",
       "stockId": "original",
       "rate": 5,
-      "image": "original.png"
+      "image": "original_news.png"
     },
     {
       "id": "nude_outfit",
