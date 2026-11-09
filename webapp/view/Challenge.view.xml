@@ -137,7 +137,7 @@
 
             <!-- 최고 기록 TOP 3 -->
                 <VBox width="200px" alignItems="Center"
-                      items="{game>/challenge/bestRecords}">
+                      items="{game>/challenge/topRecords}">
 
                 <items>
                 <VBox width="100%"
@@ -164,6 +164,7 @@
                     <Button id="returnButton" 
                             text="시장으로 돌아가기" press=".onMarket" 
                             type="Emphasized" class="peperoGameButton peperoStart sapUiMediumMarginBottom" />
+                
          </VBox>
              </HBox>  
             </VBox>
