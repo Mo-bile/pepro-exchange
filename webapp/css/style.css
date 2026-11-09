@@ -699,3 +699,61 @@
     background: transparent !important;
     box-shadow: none !important;
 }
+
+/*
+* 작성자: 전지윤
+* 날짜: 1109
+* 기능: 게임 설명 화면 꾸미기
+*/
+/* 게임 설명 팝업 */
+.peperoRulesDialog.sapMDialog {
+    border: 3px solid #6b4032;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 8px 8px 0 rgba(230, 150, 165, 0.35);
+}
+
+/* 팝업 내부 배경 */
+.peperoRulesDialog .sapMDialogScrollCont,
+.peperoRulesDialog .sapMDialogSection {
+    background: #fffaf5 !important;
+}
+
+/* 상단 제목 */
+.peperoRulesHeader.sapMTB {
+    background: #fff4ed !important;
+    border-bottom: 2px solid #e8b5ad;
+    height: 4rem;
+}
+
+.peperoRulesTitle {
+    color: #66372f !important;
+    font-weight: 700 !important;
+    font-size: 1.35rem !important;
+}
+
+/* 안에 있는 두 설명 박스 */
+.peperoRulesDialog .peperoTimerBox {
+    margin-left: auto;
+    margin-right: auto;
+
+    background: #fffaf5 !important;
+    border: 2px solid #6b4032;
+    border-radius: 14px;
+    box-shadow: none;
+}
+
+/* 패널 내부 */
+.peperoRulesDialog .peperoTimerBox .sapMPanelContent {
+    background: transparent !important;
+    border: 2px dashed #f3a6b8;
+    border-radius: 10px;
+    padding: 1.5rem !important;
+}
+
+/* 강조 글씨 */
+.peperoRulesDialog .peperoBrandTitle {
+    color: #6b4032 !important;
+    font-weight: 700 !important;
+}
+/*-----여기까지-----*/
