@@ -300,7 +300,7 @@
                     <Button id="challengeButton" text="11.11초 챌린지로 이동" press=".onChallenge" type="Emphasized" class=" peperoGameButton peperoStart sapUiMediumMarginBottom" />
                     <Button id="homeButton1" text="시작 화면으로" press=".onHome" type="Transparent" class="peperoGameButton peperoStart sapUiMediumMarginBottom sapUiSmallMarginBegin" />
                     </HBox>
-                    <Button id="resultButton" text="결과 화면 확인 (개발용)" press=".onResult" type="Default" class="sapUiSmallMarginBottom" />
+                    <!-- Button id="resultButton" text="결과 화면 확인 (개발용)" press=".onResult" type="Default" class="sapUiSmallMarginBottom" /-->
                     <!--Button text="매매하기" press=".onOpenTrade" -->
                 </VBox>
             </VBox>

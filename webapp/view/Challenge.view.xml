@@ -22,8 +22,10 @@
                   alignItems="Center" 
                   class="marketPixelHero"
                   justifyContent="Center">
+                
+            <HBox>            
 
-            <Panel width="800px" class="peperoCard peperoGameFrame sapUiSmallMarginBottom">
+            <Panel width="800px" class="peperoCard peperoGameFrame sapUiSmallMarginBottom sapUiMediumMarginEnd">
 
             <!-- HAPPY PEPERO DAY 타이틀 -->
             <VBox width="100%" alignItems="Center" class="sapUiSmallMarginBottom">
@@ -124,13 +126,49 @@
                 </HBox>
 
             </Panel>
+            <VBox width="300px" alignItems="Center">
+            <!-- 게임 결과 판넬 -->
+                <Panel width="300px" height="500px" class="peperoCard peperoGameFrame sapUiSmallMarginBottom">
+                <VBox width="100%" alignItems="Center">
 
-              <!-- 시장으로 돌아가기 버튼  -->
-            <Button id="returnButton" 
-                    text="시장으로 돌아가기" press=".onMarket" 
-                    type="Emphasized" class="peperoGameButton peperoStart sapUiMediumMarginBottom" />
+            <!-- 최고 기록 이미지 -->
+                <Image src="/image/pepero_individual_pngs/title2.png"
+                        width="170px" height="50px"
+                        class="sapUiSmallMarginBottom"/>
+                <!--Text text="{game>/challenge/bestRecords/0/time}" /-->
 
+            <!-- 최고 기록 TOP 3 -->
+                <VBox width="200px" alignItems="Center"
+                      items="{game>/challenge/bestRecords}">
 
+                <items>
+                <VBox width="100%"
+                      alignItems="Center"
+                      class="sapUiSmallMarginBottom">
+
+                    <!-- 순위 -->
+                    <Title text="{game>rank}"
+                           level="H4"
+                           class="peperoBrandTitle"/>
+
+                    <!-- 기록 -->
+                    <Title text="{game>time}"
+                           level="H3"
+                           class="peperoBrandTitle peperoTimePlate"/>
+                </VBox>
+                
+            </items>
+            
+        </VBox>
+    </VBox>
+</Panel>
+                <!-- 시장으로 돌아가기 버튼  -->
+                    <Button id="returnButton" 
+                            text="시장으로 돌아가기" press=".onMarket" 
+                            type="Emphasized" class="peperoGameButton peperoStart sapUiMediumMarginBottom" />
+         </VBox>
+             </HBox>
+               
             </VBox>
         </content>
     </Page>

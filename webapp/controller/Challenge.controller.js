@@ -29,7 +29,11 @@ sap.ui.define([
 
             // 브라우저 전체(window)에 키보드 누름 감지기를 설치합니다.
             window.addEventListener("keydown", this._fnKeyDownHandler, true);
-            
+
+            if (!oModel.getProperty("/challenge/history")) {
+                oModel.setProperty("/challenge/history", []);
+                oModel.setProperty("/challenge/bestText", "아직 기록이 없어요!");
+                }
 
         },
 
@@ -156,6 +160,36 @@ sap.ui.define([
             // oModel.setProperty("/challenge/errorText", `목표와 ${errorSec}초 차이!`);         // stop 버튼을 누를 때, 오차 안내 문구 출력
             oModel.setProperty("/challenge/result", resultStatus);                          // 성공 / 실패 / 타임아웃 판정 결과 저장
             oModel.setProperty("/session/canTrade", true);                                  // 주식 거래 잠금 해제
+
+
+            // 최고 기록 TOP 3 가져오기
+            
+                var aBest = oModel.getProperty("/challenge/bestRecords") || []; // || [] : 기존 기록이 없다면 빈 배열([])을 사용
+
+            // 새로운 기록 추가 (시간 초과는 제외)
+                    if (resultStatus !== "TIMEOUT") {
+                        aBest.push({
+                        time: stoppedSec + "초", // 화면에 표시할 기록
+                        error: errorMs          // 11.11초와의 오차
+                        });
+                    }       
+
+            // 11.11초와 가까운 순서로 정렬
+                    aBest.sort(function(a, b) {
+                    return a.error - b.error;
+                });
+
+            // 최고 기록 3개만 남기기
+                    aBest = aBest.slice(0, 3); // 0~2번까지 가져오기
+
+            // 순위 지정
+                    aBest.forEach(function(record, index) { // index가 0이면 1위, 1이면 2위, 2이면 3위
+                    record.rank = (index + 1) + "위";
+                });
+
+            // 모델에 저장
+                    oModel.setProperty("/challenge/bestRecords", aBest);
+                    console.log("최고기록 확인:", oModel.getProperty("/challenge/bestRecords"));
 
         },
 
