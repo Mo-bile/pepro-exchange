@@ -55,7 +55,7 @@
 
     <!-- 왼쪽 : 선택한 종목의 차트 -->
     <VBox
-        width="100%"
+        width="40rem"
         class="peperoCard">
 
         <layoutData>
@@ -75,8 +75,9 @@
         <viz:VizFrame
             id="marketPriceChart"
             vizType="line"
-            width="100%"
-            height="330px">
+            width="35rem"
+            height="330px"
+            vizProperties="{plotArea: {marker: {visible: false}}}">
 
             <viz:dataset>
                 <viz.data:FlattenedDataset
@@ -122,7 +123,7 @@
 
     <!-- 오른쪽 : 전체 종목 목록 -->
     <VBox
-        width="100%"
+        width="30rem"
         class="peperoCard">
 
         <layoutData>
@@ -130,7 +131,7 @@
         </layoutData>
 
         <Title
-            text="전체 종목 (24)"
+            text="전체 빼빼로"
             level="H3"
             class="sapUiSmallMarginBottom"/>
 
@@ -149,7 +150,7 @@
 
                 <columns>
                     <Column>
-                        <Text text="종목명"/>
+                        <Text text="빼빼로 명"/>
                     </Column>
 
                     <Column hAlign="End">
@@ -180,14 +181,13 @@
 </l:Grid>
 
             
-            
             </VBox>
                 <VBox id="marketCard" width="100%" class="peperoCard">
                     <Text id="marketNotice" text="화면 이동 확인용 기본 화면입니다. 게임 기능은 구현 예정입니다." class="sapUiSmallMarginBottom" />
                     <Button id="challengeButton" text="11.11초 챌린지로 이동" press=".onChallenge" type="Emphasized" class="sapUiSmallMarginBottom" />
                     <Button id="resultButton" text="결과 화면 확인 (개발용)" press=".onResult" type="Default" class="sapUiSmallMarginBottom" />
                     <Button id="homeButton1" text="시작 화면으로" press=".onHome" type="Transparent" class="sapUiSmallMarginBottom" />
-                    <Button text="매매하기" press=".onOpenTrade" />
+                    <!--Button text="매매하기" press=".onOpenTrade" -->
                 </VBox>
             </VBox>
         </content>

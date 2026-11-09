@@ -108,16 +108,6 @@ sap.ui.define([
 
             const oGameModel = this.getOwnerComponent().getModel("game");
 
-            // 챌린지에서 시장으로 돌아온 경우
-            if (
-                oGameModel.getProperty("/status") === "paused" &&
-                oGameModel.getProperty("/pauseReason") === "challenge"
-            ) {
-                this._resumeAfterChallenge();
-                return;
-            }
-
-        
             // 새로운 게임일 때만 타이머 시작
             if (oGameModel.getProperty("/status") !== "ready") {
                 return;
@@ -145,9 +135,9 @@ sap.ui.define([
 
             
             this._aNewsTicks = [
-                6 + Math.floor(Math.random() * 5),
-                15 + Math.floor(Math.random() * 7),
-                26 + Math.floor(Math.random() * 7)
+                6 + Math.floor(Math.random() * 11),// 30~50초
+                15 + Math.floor(Math.random() * 15),// 76~104초
+                26 + Math.floor(Math.random() * 16)// 130~160초
             ];
 
             // 첫 번째 뉴스부터 시작
@@ -193,8 +183,8 @@ sap.ui.define([
             
             // 1. 현재까지 실행되어야 하는 가격 변경 횟수 계산
             const iDueTick = Math.min(
-                35,
-                Math.floor(iElapsedMs / 5000)
+                89,
+                Math.floor(iElapsedMs / 2000)
                 );
 
             // 2. 아직 실행하지 않은 가격 변경을 처리
@@ -243,7 +233,7 @@ sap.ui.define([
                 if (oNews) {
 
                     // 1. 뉴스가 발생한 시점에서 시장 시간 정지
-                    this._pauseForNews(iNextTick * 5000);
+                    this._pauseForNews(iNextTick * 2000);
 
                     // 2. 뉴스 팝업 열기
                     this._openNews(oNews);
@@ -279,6 +269,39 @@ sap.ui.define([
 
                 this._iTimerHandle = null;
             }
+        },
+
+        // 챌린지에서 시장으로 복귀했을 때 타이머 재개
+        _resumeAfterChallenge: function () {
+
+            // 1. 공통 game 모델 가져오기
+            const oGameModel = this.getOwnerComponent().getModel("game");
+
+            // 2. 챌린지 때문에 정지된 상태인지 확인
+            if (
+                oGameModel.getProperty("/status") !== "paused" ||
+                oGameModel.getProperty("/pauseReason") !== "challenge"
+            ) {
+                return;
+            }
+
+            // 3. 기존 타이머 중복 실행 방지
+            this._clearMarketTimer();
+
+            // 4. 돌아온 시점부터 다시 시간 측정
+            this._iSegmentStart = performance.now();
+
+            // 5. 게임 상태를 정상 진행으로 변경
+            oGameModel.setProperty("/status", "running");
+            oGameModel.setProperty("/pauseReason", null);
+
+            // 6. 시장 타이머 다시 시작
+            this._iTimerHandle = setInterval(
+                this._updateMarketTime.bind(this),
+                100
+            );
+
+            console.log("챌린지 복귀! 시장 타이머 재개!");
         },
 
         
@@ -342,8 +365,6 @@ sap.ui.define([
 
             console.log("뉴스 확인! 시장 재개!");
         },
-
-
 
         
         // 뉴스 팝업 열기
@@ -569,7 +590,7 @@ sap.ui.define([
             const aStocks = oGameModel.getProperty("/stocks");
 
             // 3. 가격 변동률 5가지
-            const aRates = [-5, -2, 0, 2, 5];
+            const aRates = [-30, -20, 0, 20, 50];
 
             // 4. 종목 24개를 하나씩 반복
             for (let i = 0; i < aStocks.length; i++) {
@@ -613,7 +634,7 @@ sap.ui.define([
 
             // 10. 변경된 가격을 차트 기록에 추가
             this._chartHistory[sStockId].push({
-            time: ((this._iLastPriceTick || 0) + 1) * 5 + "초",
+            time: ((this._iLastPriceTick || 0) + 1) * 2 + "초",
             price: iNextPrice
             });
         }
@@ -648,52 +669,9 @@ sap.ui.define([
         },
 
 
-        
-        // 11.11초 챌린지 화면으로 이동
         onChallenge: function () {
-
-            // 1. game 모델 가져오기
-            const oGameModel = this.getOwnerComponent().getModel("game");
-
-            // 2. 챌린지로 이동하기 전 시장 시간 갱신
-            this._updateMarketTime();
-
-            // 3. 시장이 정상 진행 중인지 확인
-            if (oGameModel.getProperty("/status") !== "running") {
-                MessageToast.show("현재 챌린지에 입장할 수 없습니다.");
-                return;
-            }
-
-            // 4. 지금까지 진행된 시간 누적
-            this._iAccumulatedMs +=
-                performance.now() - this._iSegmentStart;
-
-            // 5. 남은 시간 저장
-            const iRemainingMs = Math.max(
-                0,
-                180000 - this._iAccumulatedMs
-            );
-
-            oGameModel.setProperty(
-                "/remainingMs",
-                Math.ceil(iRemainingMs)
-            );
-
-            // 6. 시장을 일시정지 상태로 변경
-            oGameModel.setProperty("/status", "paused");
-            oGameModel.setProperty("/pauseReason", "challenge");
-
-            // 7. 시장 타이머 정지
-            this._clearMarketTimer();
-
-            console.log("챌린지 입장! 시장 정지");
-
-            // 8. 챌린지 화면으로 이동
-            this.getOwnerComponent()
-                .getRouter()
-                .navTo("RouteChallenge");
+            this.getOwnerComponent().getRouter().navTo("RouteChallenge");
         },
-
         onResult: function () {
             this.getOwnerComponent().getRouter().navTo("RouteResult");
         },
