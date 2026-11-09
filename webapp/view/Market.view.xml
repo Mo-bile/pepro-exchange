@@ -274,11 +274,17 @@
         </HBox>
 
         <!-- 현재가: 기존 바인딩 유지 -->
-        <VBox>  
+        <!-- 현재가 + 등락률 -->
+        <VBox alignItems="End">
+
+            <!-- 현재가 -->
             <Text text="{game>price}"/>
-            <Text
+
+            <!-- 등락률: 상승 빨강 / 하락 파랑 / 보합 기본색 -->
+            <ObjectStatus
                 text="{= ${game>changeRate} + '%' }"
-                class="sapUiTinyMarginBegin"/>
+                state="{= ${game>changeRate} > 0 ? 'Error' : ${game>changeRate} &lt; 0 ? 'Information' : 'None' }"/>
+
         </VBox>
 
         <!-- 보유 수량: 기존 바인딩 유지 -->

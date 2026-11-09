@@ -181,6 +181,10 @@ sap.ui.define([
 
                 // 0, 1, 2까지(3번부터 slice)
                 aRecords = aRecords.slice(0, 3);
+                // 각 기록에 순위 붙이기
+                    aRecords.forEach(function(record, index) {
+                    record.rank = (index + 1) + "위";
+                    }),
                 // topRecords의 프로퍼티값을 aRecords로 설정
                 oModel.setProperty("/challenge/topRecords", aRecords);
             }
