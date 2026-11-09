@@ -48,8 +48,8 @@ sap.ui.define([
 
         },
 
-        // 조장님이 만든 시장 화면 이동 버튼
-        onMarket: function () {
+        // 조장님이 만든 홈 화면 이동 버튼
+        onHome: function () {
 
             var oModel = this.getOwnerComponent().getModel("game") || this.getView().getModel("game");
 
@@ -59,13 +59,13 @@ sap.ui.define([
             // 챌린지 중 시장으로의 이동을 막는 if문
             if(sStatus === "ACTIVE") {
                 // status가 ACTIVE여서 조건을 만족하는 경우, MessageToast를 띄우고,
-                MessageToast.show(`챌린지 진행 중에는 시장으로 이동하실 수 없습니다!`);
+                MessageToast.show(`챌린지 진행 중에는 홈으로 이동하실 수 없습니다!`);
                 // return문이 실행되어 함수 밖으로 빠져나감(함수 종료)
                 return;
             }
 
-            // manifest에 있는 RouteMarket을 찾아서 그 곳으로 이동하는 것
-            this.getOwnerComponent().getRouter().navTo("RouteMarket");
+            // manifest에 있는 RouteHome을 찾아서 그 곳으로 이동하는 것
+            this.getOwnerComponent().getRouter().navTo("RouteHome");
 
         },
 
