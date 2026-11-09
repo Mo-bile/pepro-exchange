@@ -210,6 +210,7 @@
     border-radius: 12px;
 }
 
+<<<<<<< HEAD
 /*11 09 전지윤*/
 /* 다이얼로그 전체 */
 .peperoTradeDialog.sapMDialog {
@@ -309,4 +310,39 @@
     border-radius: 8px !important;
     border-color: #c98d81 !important;
     background: #fffdfb !important;
+=======
+
+
+
+
+
+
+
+
+/* Market 화면 전용 */
+.peperoMarketPage .marketPixelHero {
+    min-height: 145px;
+    padding: 45px 12px 15px;
+    box-sizing: border-box;
+
+    background-image: url("../image/market_ui/header_awning_full.png");
+    background-position: center top;
+    background-repeat: repeat-x;
+    background-size: auto 42px;
+}
+
+.peperoMarketPage .marketPixelHeroRow {
+    gap: 12px;
+}
+
+.peperoMarketPage .marketPixelHero img {
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+@media (max-width: 650px) {
+    .peperoMarketPage .marketPixelHeroRow .sapMImg {
+        max-width: 28%;
+    }
+>>>>>>> e7367686f39d4dba7eee7a9e2124038698449ca5
 }
