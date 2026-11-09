@@ -6,37 +6,49 @@ sap.ui.define([
 
     return Controller.extend("pepero.exchange.peperoexchange.controller.Challenge", {
 
-        // 처음 화면 켜질 때 초기화 (game 모델 사용)
+        // 11. 09. 수정) 처음 화면 켜질 때 초기화 (game 모델 사용)
         onInit: function () {
 
-            var oModel = this.getOwnerComponent().getModel("game") || this.getView().getModel("game"); // "game" 모델 불러오기(+ 안전장치)
+            // getOwnerComponent로 component와 연결하여 라우터(지도)를 가져옴
+            var oRouter = this.getOwnerComponent().getRouter();
+            // "RouteChallenge"라는 화면에 진입할 때마다 this(현재 컨트롤러 내) _onRouteMatched 함수를 실행하도록 연결(두 번째 this는 이름표)
+            oRouter.getRoute("RouteChallenge").attachPatternMatched(this._onRouteMatched, this);
+
+            // 키보드(keydown) 이벤트 감지기 생성 및 등록. .bind(this)로 함수 내부의 this를 컨트롤러로 고정
+            this._fnKeyDownHandler = this._onKeyDown.bind(this);
+
+            // 브라우저 전체(window)에 키보드 누름 감지기를 설치
+            window.addEventListener("keydown", this._fnKeyDownHandler, true);
+
+        },
+
+        // "RouteChallenge" 화면에 진입할 때마다 매번 실행되는 초기화 함수 (라우터 이벤트에 의해 자동으로 실행되는 함수)
+        _onRouteMatched: function (oEvent) {
+
+            // "game" 모델 불러오기(+ 안전장치)
+            var oModel = this.getOwnerComponent().getModel("game") || this.getView().getModel("game");
 
             if (oModel) {
-                oModel.setProperty("/challenge/displayTime", "00.00");
-                oModel.setProperty("/challenge/status", "UNUSED");
-                // 다빈 님의 화면(XML View)에서 버튼을 보여주거나 숨기기 위해 필요합니다.
                 // xml e. g., <Text text = "{game>/challenge/displaytime}" />
-                // status가 "UNUSED"일 때 ➔ 화면에 [START 버튼]만 보여주고, [STOP], [RETRY] 버튼은 숨깁니다.
-                // status가 "ACTIVE"일 때 ➔ [STOP 버튼]만 보여주고, [START] 버튼은 숨깁니다.
-                    console.log("status가 성공적으로 UNUSED로 설정되었습니다!");
+                oModel.setProperty("/challenge/displayTime", "00.00");
+                // status가 "UNUSED"일 때 ➔ 화면에 [START 버튼]만 보여주고, [STOP], [RETRY] 버튼은 숨김
+                oModel.setProperty("/challenge/status", "UNUSED");
+                oModel.setProperty("/challenge/errorText", "");
+                console.log("status가 성공적으로 UNUSED로 설정되었습니다!");
             } else {
                 console.error("모델을 찾을 수 없습니다.");
             }
 
-            // 추가) 키보드(keydown) 이벤트 감지기 생성 및 등록
-            // .bind(this)로 함수 내부의 this를 컨트롤러로 고정하고, 나중에 해제할 수 있도록 변수에 저장합니다.
-            this._fnKeyDownHandler = this._onKeyDown.bind(this);
-
-            // 브라우저 전체(window)에 키보드 누름 감지기를 설치합니다.
-            window.addEventListener("keydown", this._fnKeyDownHandler, true);
-            
+            // 혹시 이전 게임이나 백그라운드에서 돌아가던 타이머가 있다면 안전하게 멈춤
+            if (this._timerId) {
+                clearInterval(this._timerId);
+            }
 
         },
 
         // 조장님이 만든 시장 화면 이동 버튼
         onMarket: function () {
 
-            // oModel에 game model을 불러옴
             var oModel = this.getOwnerComponent().getModel("game") || this.getView().getModel("game");
 
             // sStatus에 oModel을 잘 가져왔나 ? 참일 경우 oModel의 status를 불러옴 : 거짓일 경우 아무 것도 불러오지 않음
@@ -50,16 +62,8 @@ sap.ui.define([
                 return;
             }
 
+            // manifest에 있는 RouteMarket을 찾아서 그 곳으로 이동하는 것
             this.getOwnerComponent().getRouter().navTo("RouteMarket");
-
-            // this.getOwnerComponet()
-            // 의미: "이 앱의 최상위 관리자(Component.js)를 찾아라!"
-
-            // .getRouter()
-            // 의미: "관리자야, 아까 manifest.json에 세팅해 둔 화면 네비게이터(Router) 좀 가져와 줘!"
-
-            // .navTo("RouteMarket")
-            // 의미: "네비게이터야, manifest.json에 적어둔 RouteMarket(시장 화면) 주소로 운전해서 화면 바꿔줘!"
 
         },
 
@@ -74,30 +78,37 @@ sap.ui.define([
                 return;
             }
 
-            // 처음 시작 버튼을 누른 시각을 수첩(_startedAt)에 기억
+            // 처음 시작 버튼을 누른 시각을 _startedAt에 기억
             this._startedAt = performance.now();
 
             // 게임 상태 변경 및 거래 잠금
-            oModel.setProperty("/challenge/status", "ACTIVE");          // start 버튼 누르면 상태를 active로 설정(xml에서.. 상태가 active일 때 stop 버튼 visible)
+            // start 버튼 누르면 상태를 active로 설정(xml에서.. 상태가 active일 때 stop 버튼 visible)
+            oModel.setProperty("/challenge/status", "ACTIVE");
 
             // 하나의 글로벌 모델을 같이 쓰기 때문에 챌린지 화면에서의 조작이 주식 거래 화면에도 실시간으로 영향을 주게 되는 것
-            oModel.setProperty("/session/canTrade", false);
+            // oModel.setProperty("/session/canTrade", false);
 
 
 
-            // ⏱️ [추가] 0.01초(10ms)마다 화면 숫자를 계속 바꿔주는 실시간 타이머
+            // [추가] 0.01초(10ms)마다 화면 숫자를 계속 바꿔주는 실시간 타이머
             var realTime = this;
 
             // 1. 등록 및 ID 저장
-            this._timerId = setInterval(function () {                   // setInterval은 설정한 시간 간격(밀리초)마다 지정한 함수를 반복 실행
+            // setInterval은 설정한 시간 간격(밀리초)마다 지정한 함수를 반복 실행
+
+            /* 2. 이하는 10ms(0.01초)마다 반복될 로직 */
+            this._timerId = setInterval(function () {
                 
-                /* 2. 10ms(0.01초)마다 반복될 로직 */
-                // 3. 0.01초마다 코드가 실행될 때마다, 현재 이 순간의 아주 정밀한 시간을 가져옵니다.
-                var now = performance.now();                            // setInterval에 의해 시작 버튼을 누른 후 0.01초마다 반복하여 now에 기록
+                // 3. 0.01초마다 코드가 실행될 때마다, 현재 이 순간의 시간을 가져옵니다.
+                // setInterval에 의해 시작 버튼을 누른 후 0.01초마다 반복하여 now에 기록
+                var now = performance.now();
 
                 // 4. 지금 시간(now)에서 처음 START 버튼을 눌렀던 시간(realTime._startedAt)을 뺍니다.
-                var currentMs = now - realTime._startedAt;              // 현재까지 경과된 시간 = '실시간으로 기록하고 있는 현재 시각' - '시작 버튼을 처음 누른 시간' (0.01초마다 반복하여 기록)
-                var currentSec = (currentMs / 1000).toFixed(2);         // 경과된 밀리초를 소수점 2자리까지 1000으로 나눠 초단위로 보여줌. 마찬가지로 0.01초마다 반복
+                // 현재까지 경과된 시간 = '실시간으로 기록하고 있는 현재 시각' - '시작 버튼을 처음 누른 시간' (0.01초마다 반복하여 기록)
+                var currentMs = now - realTime._startedAt;
+
+                // 경과된 밀리초를 소수점 2자리까지 1000으로 나눠 초단위로 보여줌. 마찬가지로 0.01초마다 반복
+                var currentSec = (currentMs / 1000).toFixed(2);
 
                 // 시작 버튼을 누르고 15초 경과 시, realTime 실시간 타이머를 자동 종료 기능
                 if(currentMs >= 15000) {
@@ -114,7 +125,7 @@ sap.ui.define([
         // 다빈 님의 STOP 버튼 클릭 시 (시간 계산 및 결과 처리)
         onStop: function () {
 
-            // 🛑 [추가] 돌아가던 실시간 타이머 멈추기(인터벌 기능 종료)
+            // [추가] 돌아가던 실시간 타이머 멈추기(인터벌 기능 종료)
             clearInterval(this._timerId);
 
             var stoppedAt = performance.now();                  // 멈춘 시각 찍기
@@ -159,11 +170,10 @@ sap.ui.define([
 
         },
 
-        // 다빈 님의 RETRY 버튼 클릭 시 (초기화)
         // onRetry 함수는 사용자가 게임이 끝난 뒤 [RETRY (다시 시도)] 버튼을 눌렀을 때, 모든 상태를 처음으로 되돌리는 '초기화(리셋)' 코드
         onRetry: function () {
 
-            // 🛑 [추가] 혹시 타이머가 켜져있다면 안전하게 끄기
+            // [추가] 혹시 타이머가 켜져있다면 안전하게 끄기
             clearInterval(this._timerId);
 
             var oModel = this.getView().getModel("game"); // "game" 모델 불러오기
@@ -178,8 +188,15 @@ sap.ui.define([
         // [수정된 키보드 입력 처리 함수]
         _onKeyDown: function (e) {
 
+            // 현재 URL 해시를 확인하여 챌린지 화면이 아니면 무시하고 종료
+            var sHash = window.location.hash;
+            
+            if (sHash.indexOf("challenge") === -1) {
+                return;
+            }
+
             if (e.code === "Space" || e.keyCode === 32) {
-                // 🛑 1. 여기서 이벤트를 가로채서 다른 버튼들로 이벤트가 번지는 것을 막습니다!
+                // 여기서 이벤트를 가로채서 다른 버튼들로 이벤트가 번지는 것을 방지
                 e.stopPropagation(); 
                 
                 var oModel = this.getView().getModel("game");
