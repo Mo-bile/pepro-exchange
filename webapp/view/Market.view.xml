@@ -299,13 +299,15 @@
 
             
             </VBox>
-                <VBox id="marketCard" width="100%" class="peperoCard">
-                    <!--Text id="marketNotice" text="화면 이동 확인용 기본 화면입니다. 게임 기능은 구현 예정입니다." class="sapUiSmallMarginBottom" -->
-                    <HBox justifyContent="Center">
-                    <Button id="challengeButton" text="11.11초 챌린지로 이동" press=".onChallenge" type="Emphasized" class=" peperoGameButton peperoStart sapUiMediumMarginBottom" />
-                    <Button id="homeButton1" text="시작 화면으로" press=".onHome" type="Transparent" class="peperoGameButton peperoStart sapUiMediumMarginBottom sapUiSmallMarginBegin" />
-                    </HBox>
-                    <Button id="resultButton" text="결과 화면 확인 (개발용)" press=".onResult" type="Default" class="sapUiSmallMarginBottom" />
+                <VBox id="marketCard" width="100%">
+                    <HBox justifyContent="End">
+                    <Image
+                        src="/image/market_ui/button_home.png"
+                        width="155px"
+                        densityAware="false"
+                        alt="홈화면으로"
+                        press=".onHome"/>
+                </HBox>
                 </VBox>
             </VBox>
         </content>
