@@ -101,6 +101,24 @@ sap.ui.define([
 
             this._oNewsDialog = null;
             this._bNewsConfirmed = false;
+
+            /**
+             * 작성자: 전지윤
+             * 날짜: 1109
+             * 기능: 시작가 대비 등락률 계산
+             */
+            const oInitModel = new JSONModel();
+
+            oInitModel.loadData(
+                sap.ui.require.toUrl(
+                    "pepero/exchange/peperoexchange/json/gameInitialPrice.json"
+                )
+            );
+
+            oInitModel.attachRequestCompleted(function () {
+                this._initialPrices = oInitModel.getProperty("/InitPrice");
+            }, this);
+            //여기까지
         },
         
         // Market 화면 진입 시 실행
@@ -266,7 +284,29 @@ sap.ui.define([
                 this._clearMarketTimer();
 
                 oGameModel.setProperty("/status", "finished");
+
+                /**
+                 * 작성자: 전지윤
+                 * 날짜: 2026.11.09
+                 * 기능: 3분 끝나고 결과 팝업 표시. 
+                 */
+                this._openResultDialog();
             }
+        },
+
+        _openResultDialog: async function () {
+
+            if (!this._oResultDialog) {
+                this._oResultDialog = await this.loadFragment({
+                    name: "pepero.exchange.peperoexchange.fragment.ResultDialog"
+                });
+            }
+
+            this._oResultDialog.open();
+        },
+
+        onCloseResultDialog: function () {
+            this._oResultDialog.close();
         },
             
         // 시장 타이머 정리
@@ -652,6 +692,23 @@ sap.ui.define([
 
             // 8. 공통 모델에 변경된 가격 저장
             oGameModel.setProperty( "/stocks/" + i + "/price",iNextPrice);
+            /**
+             * 작성자: 전지윤
+             * 날짜: 1109
+             * 기능: 시작가 대비 등락률 표시
+             */
+            const oInitial = this._initialPrices.find(
+                stock => stock.id === aStocks[i].id
+            );
+
+            const fRate =
+                ((iNextPrice - oInitial.initialPrice) / oInitial.initialPrice) * 100;
+
+            oGameModel.setProperty(
+                "/stocks/" + i + "/changeRate",
+                fRate.toFixed(1)
+            );
+            //-----
            
             // 9. 현재 종목의 ID 가져오기
             const sStockId = aStocks[i].id;

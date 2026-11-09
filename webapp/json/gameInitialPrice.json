@@ -1,0 +1,120 @@
+{
+    "InitPrice": [
+        {
+            "id": "original",
+            "name": "오리지널 빼빼로",
+            "initialPrice": 1700,
+            "price": 1700,
+            "quantity": 0
+        },
+        {
+            "id": "almond",
+            "name": "아몬드 빼빼로",
+            "initialPrice": 2000,
+            "price": 2000,
+            "quantity": 0
+        },
+        {
+            "id": "nude",
+            "name": "누드 빼빼로",
+            "initialPrice": 1600,
+            "price": 1600,
+            "quantity": 0
+        },
+        {
+            "id": "strawberry",
+            "name": "딸기 빼빼로",
+            "initialPrice": 1800,
+            "price": 1800,
+            "quantity": 0
+        },
+        {
+            "id": "white-cookie",
+            "name": "화이트쿠키 빼빼로",
+            "initialPrice": 2100,
+            "price": 2100,
+            "quantity": 0
+        },
+        {
+            "id": "choco-cookie",
+            "name": "초코쿠키 빼빼로",
+            "initialPrice": 2200,
+            "price": 2200,
+            "quantity": 0
+        },
+        {
+            "id": "matcha",
+            "name": "말차 빼빼로",
+            "initialPrice": 2300,
+            "price": 2300,
+            "quantity": 0
+        },
+        {
+            "id": "dark-choco",
+            "name": "다크초코 빼빼로",
+            "initialPrice": 2400,
+            "price": 2400,
+            "quantity": 0
+        },
+        {
+            "id": "hazelnut",
+            "name": "헤이즐넛 빼빼로",
+            "initialPrice": 2500,
+            "price": 2500,
+            "quantity": 0
+        },
+        {
+            "id": "coconut",
+            "name": "코코넛 빼빼로",
+            "initialPrice": 2100,
+            "price": 2100,
+            "quantity": 0
+        },
+        {
+            "id": "mint-choco",
+            "name": "민트초코 빼빼로",
+            "initialPrice": 2200,
+            "price": 2200,
+            "quantity": 0
+        },
+        {
+            "id": "blueberry",
+            "name": "블루베리 빼빼로",
+            "initialPrice": 2200,
+            "price": 2200,
+            "quantity": 0
+        },
+        {
+            "id": "sweet-potato",
+            "name": "고구마 빼빼로",
+            "initialPrice": 1900,
+            "price": 1900,
+            "quantity": 0
+        },
+        {
+            "id": "chestnut",
+            "name": "밤 빼빼로",
+            "initialPrice": 2100,
+            "price": 2100,
+            "quantity": 0
+        },
+        {
+            "id": "pistachio",
+            "name": "피스타치오 빼빼로",
+            "initialPrice": 2800,
+            "price": 2800,
+            "quantity": 0
+        }
+    ],
+    "totalAssets": 11110,
+    "profit": 0,
+    "returnPct": 0,
+    "challenge": {
+        "used": false,
+        "phase": "idle",
+        "elapsedMs": null,
+        "errorMs": null,
+        "outcome": null
+    },
+    "result": null
+}

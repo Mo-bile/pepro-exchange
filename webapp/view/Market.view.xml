@@ -274,7 +274,12 @@
         </HBox>
 
         <!-- 현재가: 기존 바인딩 유지 -->
-        <Text text="{game>price}"/>
+        <VBox>  
+            <Text text="{game>price}"/>
+            <Text
+                text="{= ${game>changeRate} + '%' }"
+                class="sapUiTinyMarginBegin"/>
+        </VBox>
 
         <!-- 보유 수량: 기존 바인딩 유지 -->
         <Text text="{game>quantity}"/>
