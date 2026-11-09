@@ -12,7 +12,7 @@ sap.ui.define([
             // getOwnerComponent로 component와 연결하여 라우터(Routing 지도)를 가져옴
             var oRouter = this.getOwnerComponent().getRouter();
             
-            // "RouteChallenge"라는 화면에 진입할 때마다 this(현재 컨트롤러 내) _onRouteMatched 함수를 실행하도록 연결(두 번째 this는 이름표)
+            // 최초에 "RouteChallenge" 화면에 진입할 때마다 this(현재 컨트롤러 내) _onRouteMatched 함수를 실행하도록 연결(두 번째 this는 이름표)하는 코드를 설정
             oRouter.getRoute("RouteChallenge").attachPatternMatched(this._onRouteMatched, this);
 
             // 키보드(keydown) 이벤트 감지기 생성 및 등록. '.bind(this)'로 함수 내부의 this를 컨트롤러로 고정
@@ -26,20 +26,7 @@ sap.ui.define([
         // "RouteChallenge" 화면에 진입할 때마다 매번 실행되는 초기화 함수 (라우터 이벤트에 의해 자동으로 실행되는 함수)
         _onRouteMatched: function (oEvent) {
 
-            // "game" 모델 불러오기
-            var oModel = this.getOwnerComponent().getModel("game");
-
-            if (oModel) {
-
-                // xml e. g., <Text text = "{game>/challenge/displaytime}" />
-                oModel.setProperty("/challenge/displayTime", "00.00");
-                // status가 "UNUSED"일 때 ➔ 화면에 [START 버튼]만 보여주고, [STOP], [RETRY] 버튼은 숨김
-                oModel.setProperty("/challenge/status", "UNUSED");
-
-                    console.log("status가 성공적으로 UNUSED로 설정되었습니다!");
-            } else {
-                console.error("모델을 찾을 수 없습니다.");
-            }
+            this._resetGame();
 
             // 혹시 이전 게임이나 백그라운드에서 돌아가던 타이머가 있다면 안전하게 멈춤
             if (this._timerId) {
@@ -207,11 +194,7 @@ sap.ui.define([
         // onRetry 함수는 사용자가 게임이 끝난 뒤 RETRY 버튼을 눌렀을 때, 모든 상태를 처음으로 되돌리는 '초기화(리셋)' 코드
         onRetry: function () {
 
-            // "game" 모델 불러오기
-            var oModel = this.getView().getModel("game");
-
-            oModel.setProperty("/challenge/status", "UNUSED");      // 상태를 unused로 초기화 (xml에서.. 상태가 unused일 때 start 버튼 visible)
-            oModel.setProperty("/challenge/displayTime", "00.00");  // 화면 타이머 숫자를 "00.00"으로 초기화
+            this._resetGame();
 
         },
 
@@ -252,6 +235,17 @@ sap.ui.define([
                     // onStop 함수 실행 후 status를 'resolved'로 바꿈
                     this.onStop();
                 }
+            }
+        },
+
+        // 11.09. 추가) 게임 리셋 함수
+        _resetGame: function () {
+
+            var oModel = this.getView().getModel("game");
+
+            if (oModel) {
+                oModel.setProperty("/challenge/status", "UNUSED");
+                oModel.setProperty("/challenge/displayTime", "00.00");
             }
         },
 
