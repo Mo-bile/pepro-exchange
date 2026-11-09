@@ -9,7 +9,7 @@
             </Bar>
         </customHeader>
         <content>
-            <VBox id="homeContent" class="sapUiMediumMarginTop" alignItems="Center" justifyContent="Center">
+            <VBox id="homeContent" class="marketPixelHero" alignItems="Center" justifyContent="Center">
                 <!--로고 -->
                 <Image src="/image/pepero_individual_pngs/home.png" width="450px" height="250px"/>
                 
@@ -43,7 +43,7 @@
                 </Panel>
 
                 <!-- 두번째 박스 -->
-                <Panel id="homeChallengePanel" class="peperoTimerBox sapUiMediumMarginTop" width="600px" height="350px">
+                <Panel id="homeChallengePanel" class="peperoTimerBox sapUiMediumMarginTop sapUiSmallMarginBottom" width="600px" height="350px">
                     <content>
 
                     <HBox width="100%" justifyContent="Center">

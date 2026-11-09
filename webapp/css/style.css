@@ -317,7 +317,7 @@
 
 
 /* Market 화면 전용 */
-.peperoMarketPage .marketPixelHero {
+.marketPixelHero {
     min-height: 145px;
     padding: 45px 12px 15px;
     box-sizing: border-box;

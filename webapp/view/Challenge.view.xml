@@ -20,13 +20,10 @@
         -->
             <VBox width="100%" 
                   alignItems="Center" 
-                  class="sapUiSmallMarginBottom sapUiMediumMarginTop"
+                  class="marketPixelHero"
                   justifyContent="Center">
-            <Button id="returnButton" 
-                    text="시장으로 돌아가기" press=".onMarket" 
-                    type="Emphasized" class="peperoGameButton peperoStart sapUiMediumMarginBottom" />
 
-            <Panel width="800px" class="peperoCard peperoGameFrame">
+            <Panel width="800px" class="peperoCard peperoGameFrame sapUiSmallMarginBottom">
 
             <!-- HAPPY PEPERO DAY 타이틀 -->
             <VBox width="100%" alignItems="Center" class="sapUiSmallMarginBottom">
@@ -125,7 +122,15 @@
                            width="100px" height="50px"
                            class="sapUiSmallMarginBegin" />
                 </HBox>
+
             </Panel>
+
+              <!-- 시장으로 돌아가기 버튼  -->
+            <Button id="returnButton" 
+                    text="시장으로 돌아가기" press=".onMarket" 
+                    type="Emphasized" class="peperoGameButton peperoStart sapUiMediumMarginBottom" />
+
+
             </VBox>
         </content>
     </Page>
