@@ -108,6 +108,15 @@ sap.ui.define([
 
             const oGameModel = this.getOwnerComponent().getModel("game");
 
+            // 챌린지에서 시장으로 돌아왔다면 타이머 재개
+            if (
+                oGameModel.getProperty("/status") === "paused" &&
+                oGameModel.getProperty("/pauseReason") === "challenge"
+            ) {
+                this._resumeAfterChallenge();
+                return;
+            }
+
             // 새로운 게임일 때만 타이머 시작
             if (oGameModel.getProperty("/status") !== "ready") {
                 return;
@@ -135,9 +144,9 @@ sap.ui.define([
 
             
             this._aNewsTicks = [
-                6 + Math.floor(Math.random() * 11),// 30~50초
-                15 + Math.floor(Math.random() * 15),// 76~104초
-                26 + Math.floor(Math.random() * 16)// 130~160초
+                6 + Math.floor(Math.random() * 21),// 30~50초
+                15 + Math.floor(Math.random() * 29),// 76~104초
+                26 + Math.floor(Math.random() * 31)// 130~160초
             ];
 
             // 첫 번째 뉴스부터 시작
@@ -183,7 +192,7 @@ sap.ui.define([
             
             // 1. 현재까지 실행되어야 하는 가격 변경 횟수 계산
             const iDueTick = Math.min(
-                89,
+                180,
                 Math.floor(iElapsedMs / 1000)
                 );
 
@@ -499,6 +508,22 @@ sap.ui.define([
             // 03:00 형식으로 반환
             return String(iMinutes).padStart(2, "0") + ":" + String(iRemainSeconds).padStart(2, "0");
         },
+        
+        // JSON의 종목 ID에 맞는 빼빼로 픽셀아트 이미지 반환
+        formatStockImage: function (sStockId) {
+
+            // 종목 ID가 없으면 기본 이미지 표시
+            const sId = sStockId || "original";
+
+            // 프로젝트 이미지 폴더 경로
+            const sImagePath =
+                "pepero/exchange/peperoexchange/image/market_stocks/"
+                + sId + ".png";
+
+            // SAPUI5 리소스 경로로 변환
+            return sap.ui.require.toUrl(sImagePath);
+        },
+
 
         
         // ========== 차트 데이터 초기화 ==========
@@ -670,8 +695,33 @@ sap.ui.define([
 
 
         onChallenge: function () {
-            this.getOwnerComponent().getRouter().navTo("RouteChallenge");
-        },
+
+            const oGameModel = this.getOwnerComponent().getModel("game");
+
+            // 시장이 진행 중이라면
+            if (oGameModel.getProperty("/status") === "running") {
+
+                // 현재까지 진행된 시장 시간 저장
+                this._iAccumulatedMs +=
+                    performance.now() - this._iSegmentStart;
+
+                // 남은 시간 반영
+                oGameModel.setProperty(
+                    "/remainingMs",
+                    Math.max(0, Math.ceil(180000 - this._iAccumulatedMs))
+                );
+
+                // 시장 일시정지
+                oGameModel.setProperty("/status", "paused");
+                oGameModel.setProperty("/pauseReason", "challenge");
+
+                // 시장 타이머 정지
+                this._clearMarketTimer();
+            }
+
+    // 미니게임 화면 이동
+    this.getOwnerComponent().getRouter().navTo("RouteChallenge");
+},
         onResult: function () {
             this.getOwnerComponent().getRouter().navTo("RouteResult");
         },
