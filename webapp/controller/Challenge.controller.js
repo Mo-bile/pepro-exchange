@@ -11,13 +11,14 @@ sap.ui.define([
 
             // getOwnerComponent로 component와 연결하여 라우터(지도)를 가져옴
             var oRouter = this.getOwnerComponent().getRouter();
+            
             // "RouteChallenge"라는 화면에 진입할 때마다 this(현재 컨트롤러 내) _onRouteMatched 함수를 실행하도록 연결(두 번째 this는 이름표)
             oRouter.getRoute("RouteChallenge").attachPatternMatched(this._onRouteMatched, this);
 
-            // 키보드(keydown) 이벤트 감지기 생성 및 등록. .bind(this)로 함수 내부의 this를 컨트롤러로 고정
-            this._fnKeyDownHandler = this._onKeyDown.bind(this);
+            // 키보드(keydown) 이벤트 감지기 생성 및 등록. '.bind(this)'로 함수 내부의 this를 컨트롤러로 고정
+            this._fnKeyDownHandler = this._onKeyDown.bind(this);    
 
-            // 브라우저 전체(window)에 키보드 누름 감지기를 설치
+            // 브라우저 전체(window)에 키보드 누름 이벤트 감지기를 설치
             window.addEventListener("keydown", this._fnKeyDownHandler, true);
 
         },
@@ -29,12 +30,13 @@ sap.ui.define([
             var oModel = this.getOwnerComponent().getModel("game") || this.getView().getModel("game");
 
             if (oModel) {
+
                 // xml e. g., <Text text = "{game>/challenge/displaytime}" />
                 oModel.setProperty("/challenge/displayTime", "00.00");
                 // status가 "UNUSED"일 때 ➔ 화면에 [START 버튼]만 보여주고, [STOP], [RETRY] 버튼은 숨김
                 oModel.setProperty("/challenge/status", "UNUSED");
-                oModel.setProperty("/challenge/errorText", "");
-                console.log("status가 성공적으로 UNUSED로 설정되었습니다!");
+
+                    console.log("status가 성공적으로 UNUSED로 설정되었습니다!");
             } else {
                 console.error("모델을 찾을 수 없습니다.");
             }
@@ -51,14 +53,14 @@ sap.ui.define([
 
             var oModel = this.getOwnerComponent().getModel("game") || this.getView().getModel("game");
 
-            // sStatus에 oModel을 잘 가져왔나 ? 참일 경우 oModel의 status를 불러옴 : 거짓일 경우 아무 것도 불러오지 않음
+            // sStatus에 oModel을 잘 가져왔는지 ? 참일 경우 oModel의 status를 불러옴 : 거짓일 경우 아무 것도 불러오지 않음
             var sStatus = oModel ? oModel.getProperty("/challenge/status") : ""
 
             // 챌린지 중 시장으로의 이동을 막는 if문
             if(sStatus === "ACTIVE") {
                 // status가 ACTIVE여서 조건을 만족하는 경우, MessageToast를 띄우고,
                 MessageToast.show(`챌린지 진행 중에는 시장으로 이동하실 수 없습니다!`);
-                // return문이 실행되어 함수 밖으로 빠져나감
+                // return문이 실행되어 함수 밖으로 빠져나감(함수 종료)
                 return;
             }
 
@@ -146,70 +148,75 @@ sap.ui.define([
 
             // [판정] 성공 / 실패 / 타임아웃 판정
             var resultStatus = "FAIL";                          // resultStatus(판정 결과)의 기본값은 FAIL(실패)
-
             if (elapsedMs >= 15000) {                           // 경과 시간이 15000밀리초보다 같거나 크다면,
                 resultStatus = "TIMEOUT";                       // 결과는 TIMEOUT(시간 초과)
             } else if (stoppedSec === "11.11") {                // 정지 시간이 11.11초와 같다면,
                 resultStatus = "SUCCESS";                       // 결과는 SUCCESS(성공)
             }
 
+            // [결과] 결과창 MessageToast 기능
             if (resultStatus === "SUCCESS") {
                 MessageToast.show(`성공!`);
             } else if (resultStatus === "FAIL") {
-                MessageToast.show(`목표와 ${errorSec}초 차이!`);                              // stop 버튼 누를 때, 오차 안내 문구 MessageToast로 출력
+                // stop 버튼 누를 때, 오차 안내 문구 MessageToast로 출력
+                MessageToast.show(`목표와 ${errorSec}초 차이!`);
             } else {
                 MessageToast.show(`시간 초과!`);
             }
 
             // [화면 전달] "game" 모델에 결과 업데이트
-            oModel.setProperty("/challenge/status", "RESOLVED");                            // stop 버튼을 누르면 status가 "RESOLVED"로 설정 (xml에서.. 상태가 resolved일 때 retry 버튼 visible)
-            oModel.setProperty("/challenge/displayTime", stoppedSec);                       // 멈춘 시점의 최종 시간을 화면 숫자로 고정
-            // oModel.setProperty("/challenge/errorText", `목표와 ${errorSec}초 차이!`);         // stop 버튼을 누를 때, 오차 안내 문구 출력
-            oModel.setProperty("/challenge/result", resultStatus);                          // 성공 / 실패 / 타임아웃 판정 결과 저장
-            oModel.setProperty("/session/canTrade", true);                                  // 주식 거래 잠금 해제
+            oModel.setProperty("/challenge/status", "RESOLVED");        // stop 버튼을 누르면 status가 "RESOLVED"로 설정 (xml에서.. 상태가 resolved일 때 retry 버튼 visible)
+            oModel.setProperty("/challenge/displayTime", stoppedSec);   // 멈춘 시점의 최종 시간을 화면 숫자로 고정
+            oModel.setProperty("/challenge/result", resultStatus);      // 성공 / 실패 / 타임아웃 판정 결과 저장
 
         },
 
-        // onRetry 함수는 사용자가 게임이 끝난 뒤 [RETRY (다시 시도)] 버튼을 눌렀을 때, 모든 상태를 처음으로 되돌리는 '초기화(리셋)' 코드
+        // onRetry 함수는 사용자가 게임이 끝난 뒤 RETRY 버튼을 눌렀을 때, 모든 상태를 처음으로 되돌리는 '초기화(리셋)' 코드
         onRetry: function () {
 
-            // [추가] 혹시 타이머가 켜져있다면 안전하게 끄기
-            clearInterval(this._timerId);
+            // "game" 모델 불러오기
+            var oModel = this.getView().getModel("game");
 
-            var oModel = this.getView().getModel("game"); // "game" 모델 불러오기
-
-            oModel.setProperty("/challenge/status", "UNUSED");              // 상태를 unused로 초기화 (xml에서.. 상태가 unused일 때 start 버튼 visible)
-            oModel.setProperty("/challenge/displayTime", "00.00");          // 화면 타이머 숫자를 "00.00"으로 초기화
-            oModel.setProperty("/challenge/errorText", ``);                 // 이전 게임 결과 문구 지우기
-            oModel.setProperty("/session/canTrade", true);                  // 주식 거래 기능 정상화 (안전장치)
+            oModel.setProperty("/challenge/status", "UNUSED");      // 상태를 unused로 초기화 (xml에서.. 상태가 unused일 때 start 버튼 visible)
+            oModel.setProperty("/challenge/displayTime", "00.00");  // 화면 타이머 숫자를 "00.00"으로 초기화
 
         },
 
-        // [수정된 키보드 입력 처리 함수]
+        // 11.06. 추가) 키보드 입력 처리 함수
         _onKeyDown: function (e) {
 
             // 현재 URL 해시를 확인하여 챌린지 화면이 아니면 무시하고 종료
             var sHash = window.location.hash;
+            // window: 현재 켜져 있는 웹 브라우저 창 전체를 가리키는 최상위 객체
+            // location: window내의 속성(Property), 접속 중인 웹페이지의 주소(URL)에 대한 모든 정보를 품고 있는 객체
+            // hash: location 주소 정보 상자 안에서 '#' 기호를 포함한 그 뒷부분의 문자열을 가져오는 속성
             
             if (sHash.indexOf("challenge") === -1) {
+               // indexOf가 url #이하에서 "challenge" 단어를 찾아 시작 위치인 '14'를 반환, 만약 찾지 못했다면 '-1' 반환
                 return;
             }
 
+            // 만약 물리적으로 눌린 키가 스페이스 바 or 키 코드가 32번(스페이스바)이라면ㅡ
             if (e.code === "Space" || e.keyCode === 32) {
+
                 // 여기서 이벤트를 가로채서 다른 버튼들로 이벤트가 번지는 것을 방지
-                e.stopPropagation(); 
+                e.stopPropagation();
+                // 스페이스 바 입력 시 화면이 아래로 스크롤 되는 기능 제한
+                e.preventDefault();
                 
                 var oModel = this.getView().getModel("game");
+
+                // 모델을 불러오지 못했을 경우 실행을 중단
                 if (!oModel) return;
 
                 var sStatus = oModel.getProperty("/challenge/status");
 
                 if (sStatus === "UNUSED") {
-                    e.preventDefault(); 
+                    // onStart 함수 실행 후 status를 'active'로 바꿈
                     this.onStart();
                 } 
                 else if (sStatus === "ACTIVE") {
-                    e.preventDefault();
+                    // onStop 함수 실행 후 status를 'resolved'로 바꿈
                     this.onStop();
                 }
             }
@@ -218,12 +225,12 @@ sap.ui.define([
         // 화면을 벗어날 때 인터벌 종료(타이머 자동 종료)
         onExit: function () {
 
+            // 타이머 인터벌 기능 종료
             if(this._timerId) {
                 clearInterval(this._timerId);
             }
 
-            // [onExit 함수 내부에 추가]
-            // 화면을 벗어날 때 아까 등록한 키보드 감지기를 제거하여 메모리 누수 및 타 화면 오작동 방지
+            // 화면을 벗어날 때 아까 등록한 키보드 감지기를 제거, 메모리 누수 및 타 화면 오작동 방지
             if (this._fnKeyDownHandler) {
                 window.removeEventListener("keydown", this._fnKeyDownHandler, true);
             }
