@@ -209,3 +209,104 @@
     color: white !important;
     border-radius: 12px;
 }
+
+/*11 09 전지윤*/
+/* 다이얼로그 전체 */
+.peperoTradeDialog.sapMDialog {
+    border: 3px solid #6b4032;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 8px 8px 0 rgba(230, 150, 165, 0.35);
+}
+
+/* 내부 배경 */
+.peperoTradeDialog .sapMDialogScrollCont {
+    background: #fffaf5;
+}
+
+/* 헤더 */
+.peperoDialogHeader.sapMTB {
+    background: #fff4ed !important;
+    border-bottom: 2px solid #e8b5ad;
+    height: 4rem;
+}
+
+.peperoDialogTitle {
+    color: #66372f !important;
+    font-weight: 700 !important;
+    font-size: 1.35rem !important;
+}
+
+/* 본문 */
+.tradeContent {
+    padding: 2rem 2.5rem;
+    background: #fffaf5;
+}
+
+/* 주문 제목 */
+.tradeHeading {
+    color: #6b4032 !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.5rem;
+}
+
+/* 라벨 */
+.tradeLabel {
+    color: #70473c !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.3rem;
+}
+
+/* 현재가 박스 */
+.tradePriceBox.sapMPanel {
+    background: #f6e4d6;
+    border: 2px solid #6b4032;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.tradePriceBox .sapMPanelContent {
+    background: transparent !important;
+    border: none !important;
+    padding: 1rem 1.2rem !important;
+}
+
+/* 보유 현황 */
+.tradeHoldingBox.sapMPanel {
+    background: #f7d4df;
+    border: 2px dashed #e99aae;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.tradeHoldingBox .sapMPanelContent {
+    background: transparent !important;
+    border: none !important;
+    padding: 1.2rem !important;
+}
+
+/* 매수 */
+.pepBuyButton .sapMBtnInner {
+    background: #f3a6b8 !important;
+    border: 2px solid #dc7791 !important;
+    color: #65352e !important;
+    border-radius: 18px !important;
+    font-weight: 700;
+}
+
+/* 매도 */
+.pepSellButton .sapMBtnInner {
+    background: #fff1e7 !important;
+    border: 2px solid #d89083 !important;
+    color: #65352e !important;
+    border-radius: 18px !important;
+    font-weight: 700;
+}
+
+/* Input / Select도 조금 부드럽게 */
+.peperoTradeDialog .sapMInputBaseContentWrapper,
+.peperoTradeDialog .sapMSlt {
+    border-radius: 8px !important;
+    border-color: #c98d81 !important;
+    background: #fffdfb !important;
+}
