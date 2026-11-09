@@ -210,7 +210,6 @@
     border-radius: 12px;
 }
 
-<<<<<<< HEAD
 /*11 09 전지윤*/
 /* 다이얼로그 전체 */
 .peperoTradeDialog.sapMDialog {
@@ -310,10 +309,8 @@
     border-radius: 8px !important;
     border-color: #c98d81 !important;
     background: #fffdfb !important;
-=======
 
-
-
+}
 
 
 
@@ -344,5 +341,4 @@
     .peperoMarketPage .marketPixelHeroRow .sapMImg {
         max-width: 28%;
     }
->>>>>>> e7367686f39d4dba7eee7a9e2124038698449ca5
 }
