@@ -5,48 +5,28 @@
 
     <Dialog
         id="newsDialog"
-        title="PEPERO BREAKING NEWS"
-        contentWidth="25rem"
-        stretchOnPhone="true"
-        afterClose=".onNewsAfterClose">
+        showHeader="false"
+        contentWidth="36rem"
+        horizontalScrolling="false"
+        verticalScrolling="false"
+        afterClose=".onNewsAfterClose"
+        class="peperoNewsImageDialog">
 
-        <VBox
-            alignItems="Center"
-            class="sapUiMediumMargin">
-
-            <!-- 뉴스 제목 -->
-            <Title
-                text="{news>/title}"
-                level="H3"
-                textAlign="Center"
-                class="sapUiSmallMarginBottom"/>
-
-            <!-- 뉴스 내용 -->
-            <Text
-                text="{news>/body}"
-                textAlign="Center"
-                wrapping="true"
-                class="sapUiSmallMarginBottom"/>
-
-            <!-- 주가 변동률 -->
-            <Title
-                text="{news>/effectText}"
-                level="H2"
-                textAlign="Center"
-                class="sapUiMediumMarginTop"/>
-
-            <Text
-                text="뉴스 속보로 시장이 일시정지되었습니다."
-                textAlign="Center"
-                class="sapUiSmallMarginTop"/>
-
-        </VBox>
+        <content>
+            <!-- 뉴스 이미지만 표시 -->
+            <Image
+                src="{news>/imageSrc}"
+                width="100%"
+                densityAware="false"
+                decorative="false"
+                alt="{news>/title}"/>
+        </content>
 
         <endButton>
             <Button
-                text="확인하고 거래 재개"
-                type="Emphasized"
-                press=".onNewsConfirm"/>
+                text="확인"
+                press=".onNewsConfirm"
+                type="Emphasized"/>
         </endButton>
 
     </Dialog>

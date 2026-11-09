@@ -9,15 +9,57 @@
             </Bar>
         </customHeader>
         <content>
-            <VBox id="homeContent" class="marketPixelHero" alignItems="Center" justifyContent="Center">
-                <!--로고 -->
-                <Image src="/image/pepero_individual_pngs/home.png" width="450px" height="250px"/>
-                
-                <VBox id="homeIntro" class="sapUiMediumMarginBottom" alignItems="Center">
-                    <Title id="homeWelcomeTitle" text="달콤한 빼빼로 랜드에 오신 걸 환영해요!" level="H2" wrapping="true" class="peperoBrandTitle sapUiSmallMarginBottom" />
-                    <Text id="homeNotice" text="오르락내리락, 가격 롤러코스터를 즐겨보세요." class="sapUiTinyMarginBottom" />
-                    <Text id="homeIntroDescription" text="빼빼로 종목을 사고팔며 나만의 자산을 불려보세요!" />
-                </VBox>
+                    <VBox id="homeContent"
+            class="marketPixelHero"
+            alignItems="Center"
+            justifyContent="Center">
+
+            <VBox id="homeFlashFrame"
+                class="homeFlashFrame"
+                width="900px">
+
+                <!-- 기존 시작 화면 이미지 -->
+                <Image
+                    id="homeBackground"
+                    src="/image/home_flash.png"
+                    width="100%"/>
+
+                <!-- 게임 입장 -->
+                <Button
+                    id="startButton"
+                    text="게임 입장"
+                    press=".onStart"
+                    class="homeFlashHotspot homeFlashStart"/>
+
+                <!-- 챌린지 입장 -->
+                <Button
+                    id="challengeButton"
+                    text="챌린지 입장"
+                    press=".onChallenge"
+                    class="homeFlashHotspot homeFlashChallenge"/>
+
+                <!-- 게임 설명 -->
+                <Button
+                    id="rulesButton"
+                    text="게임 설명"
+                    press=".onRules"
+                    class="homeFlashHotspot homeFlashRules"/>
+
+            </VBox>
+            </VBox>
+        </content>
+
+        <dependents>
+    <Dialog
+        id="homeRulesDialog"
+        title="게임 설명"
+        contentWidth="680px"
+        contentHeight="70vh"
+        stretchOnPhone="true"
+        verticalScrolling="true">
+
+        <content>
+            <VBox width="100%">
 
                 <!-- 첫번째 박스 -->
                 <Panel id="homeRulesPanel" class="peperoTimerBox sapUiMediumMarginTop" width="600px" height="400px" >
@@ -57,8 +99,17 @@
                         </VBox>
                     </content>
                 </Panel>
-                <Button id="startButton" text="게임 시작! 빼빼로 랜드로 출발" press=".onStart" type="Emphasized" class="peperoGameButton peperoStart sapUiMediumMarginBottom" />
+
             </VBox>
         </content>
+
+        <endButton>
+            <Button
+                text="닫기"
+                press=".onCloseRules"/>
+        </endButton>
+
+    </Dialog>
+</dependents>
     </Page>
 </mvc:View>
