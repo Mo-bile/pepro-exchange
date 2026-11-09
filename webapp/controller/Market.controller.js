@@ -508,6 +508,22 @@ sap.ui.define([
             // 03:00 형식으로 반환
             return String(iMinutes).padStart(2, "0") + ":" + String(iRemainSeconds).padStart(2, "0");
         },
+        
+        // JSON의 종목 ID에 맞는 빼빼로 픽셀아트 이미지 반환
+        formatStockImage: function (sStockId) {
+
+            // 종목 ID가 없으면 기본 이미지 표시
+            const sId = sStockId || "original";
+
+            // 프로젝트 이미지 폴더 경로
+            const sImagePath =
+                "pepero/exchange/peperoexchange/image/market_stocks/"
+                + sId + ".png";
+
+            // SAPUI5 리소스 경로로 변환
+            return sap.ui.require.toUrl(sImagePath);
+        },
+
 
         
         // ========== 차트 데이터 초기화 ==========

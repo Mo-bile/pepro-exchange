@@ -244,3 +244,225 @@
         max-width: 28%;
     }
 }
+
+
+/* ==========================================
+   B / JHJ - MARKET 화면 전용 디자인
+   기존 공통 디자인 가이드 유지
+========================================== */
+
+/* 시장 화면에서만 사용하는 보조 색상 */
+.peperoApp .peperoMarketPage {
+    --market-pink: #F9E3E9;
+    --market-pink-border: #F3C7D5;
+    --market-text: #5A382B;
+    --market-muted: #80685C;
+}
+
+/* ==========================================
+   1. 시장 전체 컨테이너
+========================================== */
+
+/* 바깥쪽 중복 카드 제거 */
+.peperoApp .peperoMarketPage .marketMainCard.peperoCard {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+}
+
+/* ==========================================
+   2. 시장 현황 정보판
+========================================== */
+
+/* 전체 시장 현황 */
+.peperoApp .peperoMarketPage .marketStatusRow {
+
+    /* 아래 차트와 종목 목록의 양끝에 맞추기 */
+    width: calc(100% - 2rem) !important;
+    margin-left: 1rem;
+    margin-right: 1rem;
+
+    box-sizing: border-box;
+
+    background: var(--pepero-surface, #FFFFFF);
+    border: 1px solid var(--pepero-border, #E8D8C3);
+    border-radius: 12px;
+
+    padding: 16px 20px;
+    margin-bottom: 20px;
+
+    gap: 14px;
+    box-shadow: 0 3px 0 #F1E5DC;
+}
+
+/* 네 영역이 가로 공간을 나눠 갖도록 설정 */
+.peperoMarketPage .marketStatusRow > .sapMFlexItem {
+    flex: 1 1 165px;
+    min-width: 0;
+}
+
+/* 왼쪽 시장 현황 제목 */
+.peperoMarketPage .marketStatusTitle {
+    border-radius: 9px;
+    padding: 4px;
+    box-sizing: border-box;
+
+    justify-content: center;
+    gap: 10px;
+}
+
+.peperoMarketPage .marketStatusTitle .sapMTitle {
+    color: var(--market-text);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+/* 시간 / 현금 / 총자산 영역 */
+.peperoMarketPage .marketStatusItem {
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 8px 4px;
+}
+
+/* 라벨과 숫자 사이 간격 */
+.peperoMarketPage .marketStatusText {
+    gap: 5px;
+}
+
+/* 라벨 */
+.peperoMarketPage .marketStatusText .sapMLabel {
+    color: var(--market-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* 실시간 숫자 */
+.peperoMarketPage .marketStatusValue.sapMText {
+    color: var(--market-text);
+    font-size: 1.4rem;
+    font-weight: 800;
+    line-height: 1.5;
+
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* 아이콘 크기 통일 */
+.peperoMarketPage .marketStatusRow .sapMImg {
+    width: 38px;
+    height: auto;
+    flex-shrink: 0;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+/* ==========================================
+   3. 차트 / 종목 목록 공통 패널
+========================================== */
+
+/* 두 패널의 외형 통일 */
+/* Market 차트 / 종목 목록 공통 패널 */
+.peperoApp .peperoMarketPage .marketChartPanel.peperoCard,
+.peperoApp .peperoMarketPage .marketStocksPanel.peperoCard {
+    width: 100%;
+    box-sizing: border-box;
+
+    /* 팀 공통 배경색 */
+    background: var(--pepero-surface, #FFFFFF);
+
+    /* 픽셀아트 간판과 같은 초코색 테두리 */
+    border: 2px solid #5A382B;
+    border-radius: 8px;
+
+    /* 내부 여백 */
+    padding: 18px;
+
+    /* 기존의 볼록한 그림자 제거 */
+    box-shadow: none;
+}
+/* ==========================================
+   //4. 선택 종목 현재가
+
+.peperoMarketPage .marketMainPrice {
+    display: block;
+    padding: 6px 8px;
+}
+
+/* 현재가 숫자 */
+.peperoMarketPage .marketMainPrice .sapMObjectNumberText {
+    color: var(--market-text);
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+
+/* 가격 단위 PPR */
+.peperoMarketPage .marketMainPrice .sapMObjectNumberUnit {
+    color: var(--market-muted);
+    font-size: 0.85rem;
+}
+
+/* ==========================================
+   5. 오른쪽 종목 목록
+========================================== */
+
+/* 테이블 머리글 */
+.peperoMarketPage .marketStocksPanel .sapMListTblHeaderCell {
+    background: #FFF8F9;
+    border-bottom: 1px solid var(--pepero-border, #E8D8C3);
+}
+
+/* 종목 행 구분선 */
+.peperoMarketPage .marketStocksPanel .sapMListTblCell {
+    border-bottom-color: #F1E5DC;
+}
+
+/* 종목 이름과 가격 */
+.peperoMarketPage .marketStocksPanel .sapMText {
+    color: var(--market-text);
+    font-size: 0.9rem;
+}
+
+/* 선택/포커스 상태는 Horizon 테마를 유지 */
+
+/* ==========================================
+   6. 매매 버튼
+========================================== */
+
+.peperoMarketPage .marketTradeButton {
+    margin-top: 14px;
+}
+
+/* 버튼 색상은 Horizon 기본 테마 사용 */
+.peperoMarketPage .marketTradeButton .sapMBtnInner {
+    min-height: 2.75rem;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+/* ==========================================
+   7. 좁은 화면 대응
+========================================== */
+
+@media (max-width: 900px) {
+
+    .peperoMarketPage .marketStatusRow {
+        padding: 12px;
+        gap: 8px;
+    }
+
+    .peperoMarketPage .marketStatusRow > .sapMFlexItem {
+        flex-basis: 40%;
+    }
+
+    .peperoMarketPage .marketStatusValue.sapMText {
+        font-size: 1.15rem;
+    }
+
+    .peperoMarketPage .marketChartPanel.peperoCard,
+    .peperoMarketPage .marketStocksPanel.peperoCard {
+        padding: 12px;
+    }
+}
