@@ -82,11 +82,7 @@
                             </VBox>
                             <VBox id="homeDurationRule" class="sapUiSmallMarginBottom">
                                 <Label id="homeDurationLabel" text="게임 시간 · 3분" design="Bold" class="peperoBrandTitle" />
-                                <Text id="homeGameDuration" text="신나는 3분 동안 나만의 매매 타이밍을 찾아보세요." />
-                            </VBox>
-                            <VBox id="homeFeeRule">
-                                <Label id="homeFeeLabel" text="매매 수수료 · 없음" design="Bold" class="peperoBrandTitle" />
-                                <Text id="homeTradingFee" text="사고팔 때 수수료는 0! 가볍게 거래를 즐겨요." />
+                                <Text id="homeGameDuration" text="신나는 3분 동안 나만의 매매 타이밍을 찾아 부자가 되어보세요." />
                             </VBox>
                         </VBox>
                     </content>
@@ -102,8 +98,7 @@
 
                         <VBox id="homeChallengeContent">
                             <Text id="homeChallengeNotice" text="랜드 속 작은 놀이터에도 들러볼까요?" class="peperoBrandTitle sapUiSmallMarginBottom" />
-                            <Text id="homeChallengeDescription" text="시장에서 원할 때 참여해, 11.11초에 딱 맞춰 멈춰보세요!" class="sapUiSmallMarginBottom" />
-                            <Text id="homeChallengeOptional" text="참여는 자유! 빼빼로 매매만 즐겨도 좋아요." />
+                            <Text id="homeChallengeDescription" text="11.11초에 딱 맞춰 멈춰보세요!" class="sapUiSmallMarginBottom" />
                         </VBox>
                     </content>
                 </Panel>

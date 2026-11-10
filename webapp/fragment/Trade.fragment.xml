@@ -179,13 +179,32 @@ xmlns:viz.data="sap.viz.ui5.data" -->
                 text="♥ 수량 ♥"
                 class="tradeLabel sapUiSmallMarginTop" />
 
-            <Input
+            <!-- 수량 조절 Input창 -->
+            <HBox width="100%" alignItems="Center">
+                <StepInput
                 id="qtyInput"
-                type="Number"
-                width="100%"
-                placeholder="매매 수량을 입력하세요"
-                liveChange=".onQuantityChange" />
+                value="1"
+                min="1"
+                max="100"
+                step="1"
+                width="12rem"
+                change=".onQuantityChange"/>
 
+            </HBox>
+            <HBox width="100%" alignItems="Center">
+            <Button
+                text="최대 구매♥"
+                type="Emphasized"
+                class="pepBuyButton"
+                press=".onMaxBuy"/>
+
+                <Button
+                text="전체 매도♥"
+                type="Default"
+                class="pepSellButton sapUiTinyMarginBegin"
+                press=".onMaxSell"/>
+            
+            </HBox>
             <Text
                 id="expectedAmountText"
                 text="예상 거래금액: 0 PPR"
