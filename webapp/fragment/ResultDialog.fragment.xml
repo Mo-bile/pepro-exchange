@@ -71,7 +71,7 @@
             <VBox class="resultInfoBox" alignItems="Center">
                 <Label text="보유 현금" />
                 <Title
-                    text="{game>/cash} PPR"
+                    text="{path: 'game>/totalAssets', formatter: '.formatWon'}"
                     level="H3" />
 
                 <Label

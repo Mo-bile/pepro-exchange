@@ -150,8 +150,8 @@ xmlns:viz.data="sap.viz.ui5.data" -->
                 class="tradeHeading" />
 
             <Text
-                text="현금 · {game>/cash} PPR"
-                class="tradeCash sapUiSmallMarginBottom" />
+            text="{path: 'game>/cash', formatter: '.formatTradeCash'}"
+            class="tradeCash sapUiSmallMarginBottom" />
 
             <Label
                 text="♥ 종목 ♥"

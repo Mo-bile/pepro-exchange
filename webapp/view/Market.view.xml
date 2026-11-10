@@ -98,8 +98,8 @@
         <VBox class="marketStatusText">
             <Label text="보유 현금(PPR)"/>
             <Text
-                text="{game>/cash}"
-                class="marketStatusValue"/>
+            text="{path: 'game>/cash', formatter: '.formatWon'}"
+            class="marketStatusValue"/>
         </VBox>
     </HBox>
 
@@ -113,8 +113,8 @@
         <VBox class="marketStatusText">
             <Label text="총자산(PPR)"/>
             <Text
-                text="{game>/totalAssets}"
-                class="marketStatusValue"/>
+            text="{path: 'game>/totalAssets', formatter: '.formatWon'}"
+            class="marketStatusValue"/>
         </VBox>
     </HBox>
 
@@ -144,7 +144,7 @@
             class="marketPanelTitle sapUiSmallMarginBottom"/>
 
         <ObjectNumber
-            number="{chart>/price}"
+            number="{path: 'chart>/price', formatter: '.formatNumber'}"
             unit="PPR"
             class="marketMainPrice sapUiSmallMarginBottom"/>
 
@@ -296,7 +296,7 @@
         <VBox alignItems="End">
 
             <!-- 현재가 -->
-            <Text text="{game>price}"/>
+            <Text text="{path: 'game>price', formatter: '.formatWon'}"/>
 
             <!-- 등락률: 상승 빨강 / 하락 파랑 / 보합 기본색 -->
             <ObjectStatus
