@@ -191,10 +191,10 @@ sap.ui.define([
 
             
              this._aNewsTicks = [
-                 6 + Math.floor(Math.random() * 21),// 30~50초
-                 15 + Math.floor(Math.random() * 29),// 76~104초
-                 26 + Math.floor(Math.random() * 31)// 130~160초
-             ];
+                30 + Math.floor(Math.random() * 21),  // 30~50초
+                76 + Math.floor(Math.random() * 29),  // 76~104초
+                130 + Math.floor(Math.random() * 31)  // 130~160초
+            ];
 
 
             // 첫 번째 뉴스부터 시작
@@ -206,7 +206,7 @@ sap.ui.define([
             const aNews = oNewsDataModel.getProperty("/events");
 
             // 원본을 보존하기 위해 배열 복사
-            this._aNewsPool = aNews.slice();
+            this._aNewsPool = aNews.map(oNews => ({ ...oNews }));
 
             console.log("뉴스 발생 회차:", this._aNewsTicks);
 
@@ -257,7 +257,7 @@ sap.ui.define([
                 if (this._iNewsIndex < this._aNewsTicks.length) {
 
                     // 이번 가격 갱신 회차가 뉴스 발생 시점인지 확인
-                    if (iNextTick === this._aNewsTicks[this._iNewsIndex]) {
+                    if (iNextTick >= this._aNewsTicks[this._iNewsIndex]) {
 
                         // 뉴스 목록에서 랜덤으로 하나 선택
                         const iRandom = Math.floor(
@@ -585,6 +585,28 @@ sap.ui.define([
             );
         }
         },
+        // 숫자에 천 단위 쉼표 적용
+formatNumber: function (vAmount) {
+    const nAmount = Number(vAmount);
+
+    return Number.isFinite(nAmount)
+        ? nAmount.toLocaleString("ko-KR")
+        : "0";
+},
+
+        // 숫자에 천 단위 쉼표 + 원 표시
+        formatWon: function (vAmount) {
+            const nAmount = Number(vAmount);
+
+            return (
+                Number.isFinite(nAmount)
+                    ? nAmount.toLocaleString("ko-KR")
+                    : "0"
+            );
+        },
+        formatTradeCash: function (vAmount) {
+            return "현금 · " + this.formatWon(vAmount);
+        },
 
 
 
@@ -710,8 +732,8 @@ sap.ui.define([
             // 2. 전체 종목 배열 가져오기
             const aStocks = oGameModel.getProperty("/stocks");
 
-            // 3. 가격 변동률 5가지
-            const aRates = [-12, -8, -4, 4, 8, 12];
+            // 3. 가격 변동률 
+            const aRates = [-12, -8, -4,0, 4, 8, 12];
 
             // 4. 종목 24개를 하나씩 반복
             for (let i = 0; i < aStocks.length; i++) {
@@ -927,7 +949,7 @@ sap.ui.define([
              */
 
             this.byId("currentPriceText")
-                .setText("현재가: " + oStock.price.toLocaleString() + " PPR");
+                .setText("현재가: " + this.formatWon(oStock.price));
 
             this.byId("holdingText")
                 .setText("보유수량: " + oStock.quantity + "주");
@@ -956,10 +978,10 @@ sap.ui.define([
                 : 0;
 
             this.byId("expectedAmountText")
-                .setText("예상 거래금액: " + iAmount.toLocaleString() + " PPR");
+                .setText("예상 거래금액: " + this.formatWon(iAmount));
 
             this.byId("feeText")
-                .setText("수수료: " + iFee.toLocaleString() + " PPR");
+                .setText("수수료: " + this.formatWon(iFee));
         },
 
         onBuy: function () {
